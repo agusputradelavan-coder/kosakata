@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Belajar Kosakata</title>
+<style>
+* { box-sizing: border-box; }
+body { margin:0; background:black; font-family:Arial,Helvetica,sans-serif; color:white; }
+.page { display:none; min-height:100vh; }
+.page.active { display:block; }
+
+/* MAIN MENU */
+.container { width:100%; max-width:420px; margin:auto; padding-top:40px; text-align:center; }
+.title-box { border:3px solid #f5a623; border-radius:8px; padding:20px; margin:0 20px; }
+.title1 { font-size:32px; font-weight:bold; }
+.title2 { font-size:24px; margin-top:5px; }
+.title3 { font-size:22px; }
+.timer { margin-top:40px; font-size:36px; }
+.button { display:block; margin:40px 20px; padding:18px; font-size:20px; background:#6f8793; border:3px solid #20c7b4; border-radius:8px; text-decoration:none; color:white; cursor:pointer; }
+.button:hover { opacity:0.85; }
+
+/* SUB MENU */
+.sub-container { width:100%; max-width:420px; margin:auto; padding:0 20px 40px; text-align:center; position:relative; }
+.btn-kembali { position:absolute; top:204px; right:20px; background:#20c7b4; color:white; border:none; border-radius:6px; padding:11px 16px; font-size:15px; font-weight:bold; cursor:pointer; letter-spacing:1px; white-space:nowrap; z-index:10; }
+.btn-kembali:hover { background:#17a899; }
+.sub-flag-title { font-size:30px; font-weight:bold; margin:30px 0 4px; text-align:center; }
+.sub-subtitle { font-size:19px; color:#ddd; margin:0; text-align:center; }
+.sub-timer-row { text-align:center; margin:10px 0 0; font-size:15px; color:#aaa; }
+.section-label { font-size:20px; color:#ccc; margin:160px 0 16px; }
+.sub-btn-row { display:flex; gap:14px; margin-bottom:14px; justify-content:center; }
+.sub-btn { flex:1; padding:22px 10px; font-size:18px; font-weight:bold; background:#111; border:2px solid #f5a623; border-radius:8px; color:white; cursor:pointer; letter-spacing:1px; transition:background 0.2s; }
+.sub-btn:hover { background:#222; }
+.sub-btn.full { width:100%; flex:none; }
+.vokal-label { font-size:20px; color:#ccc; margin:24px 0 14px; }
+.sub-btn-vokal { width:100%; padding:22px 10px; font-size:20px; font-weight:bold; background:#111; border:2px solid #f5a623; border-radius:8px; color:white; cursor:pointer; letter-spacing:3px; transition:background 0.2s; display:block; }
+.sub-btn-vokal:hover { background:#222; }
+
+/* GAME PAGE */
+.game-container { width:100%; max-width:420px; margin:auto; padding:30px 24px 40px; text-align:center; position:relative; min-height:100vh; display:flex; flex-direction:column; }
+.game-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; }
+.game-flag-title { font-size:18px; font-weight:bold; text-align:left; max-width:200px; line-height:1.3; }
+.game-timer { font-size:14px; color:#aaa; }
+.game-progress { font-size:13px; color:#888; margin-bottom:16px; text-align:right; }
+.btn-home { position:absolute; top:200px; right:30px; background:none; border:none; cursor:pointer; color:#20c7b4; font-size:11px; font-weight:bold; letter-spacing:0.5px; text-align:center; padding:0; line-height:1.4; }
+.btn-home span { display:block; font-size:23px; }
+.btn-home small { display:block; font-size:6px; color:#20c7b4; }
+.btn-home:hover { opacity:0.8; }
+.game-kalimat { font-size:26px; font-weight:bold; color:white; line-height:1.4; margin:16px 0 8px; text-align:center; min-height:80px; }
+.game-sub { font-size:15px; color:#f5a623; margin-bottom:18px; font-weight:bold; }
+.game-instruction-box { border:2px solid #f5a623; border-radius:10px; padding:20px 18px; text-align:left; margin-bottom:24px; background:#0d0d0d; flex:1; }
+.instruction-row { margin-bottom:14px; font-size:15px; line-height:1.6; color:#ddd; }
+.instruction-row:last-child { margin-bottom:0; }
+.instruction-label { color:#f5a623; font-weight:bold; font-size:13px; text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:3px; }
+.game-nav { display:flex; gap:14px; margin-top:auto; padding-top:16px; }
+.btn-nav { flex:1; padding:18px; font-size:17px; font-weight:bold; border-radius:8px; border:none; cursor:pointer; letter-spacing:1px; transition:opacity 0.2s; }
+.btn-nav:hover { opacity:0.85; }
+.btn-back-game { background:#555; color:white; }
+.btn-next-game { background:#20c7b4; color:white; }
+.btn-nav:disabled { opacity:0.3; cursor:not-allowed; }
+</style>
+</head>
+<body>
+
+<!-- MAIN MENU -->
+<div class="page active" id="page-main">
+  <div class="container">
+    <div class="title-box">
+      <div class="title1">Belajar Kosakata</div>
+      <div class="title2">Struktur Kalimat</div>
+      <div class="title3">Indonesia &amp; Inggris</div>
+    </div>
+    <div class="timer" id="main-timer">0 Jam 0 Menit 0 Detik</div>
+    <a class="button" onclick="openPage('page-alat')">🧰 Alat Sehari-hari</a>
+    <a class="button" onclick="openPage('page-makan')">🍽️ Makanan &amp; Minuman</a>
+    <a class="button" onclick="openPage('page-angka')">🔢 Angka &amp; Jumlah</a>
+    <a class="button" onclick="openPage('page-warna')">🎨 Warna &amp; Bentuk</a>
+    <a class="button" onclick="openPage('page-struktur')" style="border-color:#f5a623;background:#1a1200;">📐 Struktur Kalimat</a>
+  </div>
+</div>
+
+<!-- ALAT SEHARI-HARI -->
+<div class="page" id="page-alat">
+  <div class="sub-container">
+    <button class="btn-kembali" onclick="openPage('page-main')">KEMBALI</button>
+    <div class="sub-flag-title">🧰 Alat Sehari-hari</div>
+    <div class="sub-subtitle">Kosakata &amp; Kalimat</div>
+    <div class="sub-timer-row" id="timer-alat">0 Jam 0 Menit 0 Detik</div>
+    <div class="section-label">Pilih Tema</div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('alat_dapur')">Dapur</button>
+      <button class="sub-btn" onclick="startGame('alat_kebersihan')">Kebersihan</button>
+    </div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('alat_tulis')">Alat Tulis</button>
+      <button class="sub-btn" onclick="startGame('alat_rumah')">Rumah</button>
+    </div>
+    <div class="vokal-label">Semua Alat</div>
+    <button class="sub-btn-vokal" onclick="startGame('alat_semua')">🧰 Semua Kategori</button>
+  </div>
+</div>
+
+<!-- MAKANAN & MINUMAN -->
+<div class="page" id="page-makan">
+  <div class="sub-container">
+    <button class="btn-kembali" onclick="openPage('page-main')">KEMBALI</button>
+    <div class="sub-flag-title">🍽️ Makanan &amp; Minuman</div>
+    <div class="sub-subtitle">Kosakata &amp; Kalimat</div>
+    <div class="sub-timer-row" id="timer-makan">0 Jam 0 Menit 0 Detik</div>
+    <div class="section-label">Pilih Tema</div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('makan_buah')">Buah</button>
+      <button class="sub-btn" onclick="startGame('makan_sayur')">Sayuran</button>
+    </div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('makan_masakan')">Masakan</button>
+      <button class="sub-btn" onclick="startGame('makan_minuman')">Minuman</button>
+    </div>
+    <div class="vokal-label">Semua Makanan</div>
+    <button class="sub-btn-vokal" onclick="startGame('makan_semua')">🍽️ Semua Kategori</button>
+  </div>
+</div>
+
+<!-- ANGKA & JUMLAH -->
+<div class="page" id="page-angka">
+  <div class="sub-container">
+    <button class="btn-kembali" onclick="openPage('page-main')">KEMBALI</button>
+    <div class="sub-flag-title">🔢 Angka &amp; Jumlah</div>
+    <div class="sub-subtitle">Kosakata &amp; Kalimat</div>
+    <div class="sub-timer-row" id="timer-angka">0 Jam 0 Menit 0 Detik</div>
+    <div class="section-label">Pilih Tema</div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('angka_bilangan')">Bilangan</button>
+      <button class="sub-btn" onclick="startGame('angka_urutan')">Urutan</button>
+    </div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('angka_jumlah')">Jumlah Benda</button>
+      <button class="sub-btn" onclick="startGame('angka_waktu')">Waktu</button>
+    </div>
+    <div class="vokal-label">Semua Angka</div>
+    <button class="sub-btn-vokal" onclick="startGame('angka_semua')">🔢 Semua Kategori</button>
+  </div>
+</div>
+
+<!-- WARNA & BENTUK -->
+<div class="page" id="page-warna">
+  <div class="sub-container">
+    <button class="btn-kembali" onclick="openPage('page-main')">KEMBALI</button>
+    <div class="sub-flag-title">🎨 Warna &amp; Bentuk</div>
+    <div class="sub-subtitle">Kosakata &amp; Kalimat</div>
+    <div class="sub-timer-row" id="timer-warna">0 Jam 0 Menit 0 Detik</div>
+    <div class="section-label">Pilih Tema</div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('warna_dasar')">Warna Dasar</button>
+      <button class="sub-btn" onclick="startGame('warna_campuran')">Warna Campuran</button>
+    </div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('bentuk_dasar')">Bentuk Dasar</button>
+      <button class="sub-btn" onclick="startGame('bentuk_ruang')">Bentuk Ruang</button>
+    </div>
+    <div class="vokal-label">Semua Warna &amp; Bentuk</div>
+    <button class="sub-btn-vokal" onclick="startGame('warna_semua')">🎨 Semua Kategori</button>
+  </div>
+</div>
+
+<!-- GAME PAGE -->
+<div class="page" id="page-game">
+  <div class="game-container">
+    <div class="game-header">
+      <div class="game-flag-title" id="game-title">—</div>
+      <div class="game-timer" id="game-timer-display">0 Jam 0 Menit 0 Detik</div>
+    </div>
+    <div class="game-progress" id="game-progress">1 / 1</div>
+    <button class="btn-home" id="btn-home-game" onclick="endGame()">
+      <span>🏠</span><small>KEMBALI KE MENU</small>
+    </button>
+    <div class="game-kalimat" id="game-kalimat">—</div>
+    <div class="game-sub" id="game-sub">—</div>
+    <div class="game-instruction-box">
+      <div class="instruction-row">
+        <span class="instruction-label" id="lbl-1">🇬🇧 Bahasa Inggris</span>
+        <span id="instr-1">—</span>
+      </div>
+      <div class="instruction-row">
+        <span class="instruction-label" id="lbl-2">Penjelasan Kata</span>
+        <span id="instr-2">—</span>
+      </div>
+      <div class="instruction-row">
+        <span class="instruction-label" id="lbl-3">Hubungan Kata</span>
+        <span id="instr-3">—</span>
+      </div>
+    </div>
+    <div class="game-nav">
+      <button class="btn-nav btn-back-game" id="btn-kembali-game" onclick="navGame(-1)">◀ KEMBALI</button>
+      <button class="btn-nav btn-next-game" id="btn-lanjut-game" onclick="navGame(1)">LANJUTKAN ▶</button>
+    </div>
+  </div>
+</div>
+
+<!-- STRUKTUR KALIMAT -->
+<div class="page" id="page-struktur">
+  <div class="sub-container">
+    <button class="btn-kembali" onclick="openPage('page-main')">KEMBALI</button>
+    <div class="sub-flag-title">📐 Struktur Kalimat</div>
+    <div class="sub-subtitle">Pola &amp; Tata Bahasa Inggris</div>
+    <div class="sub-timer-row" id="timer-struktur">0 Jam 0 Menit 0 Detik</div>
+    <div class="section-label">Pilih Tema</div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('str_ganti')">Kata Ganti</button>
+      <button class="sub-btn" onclick="startGame('str_tobe')">To Be</button>
+    </div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('str_tunjuk')">Kata Tunjuk</button>
+      <button class="sub-btn" onclick="startGame('str_kontraksi')">Kontraksi</button>
+    </div>
+    <div class="sub-btn-row">
+      <button class="sub-btn" onclick="startGame('str_tanya')">Kalimat Tanya</button>
+      <button class="sub-btn" onclick="startGame('str_waktu')">Waktu Kalimat</button>
+    </div>
+    <div class="vokal-label">Semua Struktur</div>
+    <button class="sub-btn-vokal" onclick="startGame('str_semua')">📐 Semua Kategori</button>
+  </div>
+</div>
+
+<script>
+// =============================================
+// DATA KOSAKATA
+// =============================================
+
+const dataAlatDapur = {
+  'panci': {
+    kalimat: 'Ibu merebus air menggunakan panci besar.',
+    sub: '— Panci —',
+    inggris: 'Mother boils water using a large pot.',
+    penjelasan: 'Panci = pot / saucepan. Alat masak dari logam berbentuk bulat dengan pegangan, digunakan untuk merebus atau memasak.',
+    hubungan: '"Merebus" (to boil) selalu berkaitan dengan panci dan air. Kata "besar" (large/big) menerangkan ukuran panci.'
+  },
+  'wajan': {
+    kalimat: 'Ayah menggoreng telur di atas wajan panas.',
+    sub: '— Wajan —',
+    inggris: 'Father fries an egg in a hot frying pan.',
+    penjelasan: 'Wajan = frying pan / wok. Alat masak datar untuk menggoreng dengan sedikit atau banyak minyak.',
+    hubungan: '"Menggoreng" (to fry) membutuhkan wajan dan minyak. "Panas" (hot) menggambarkan kondisi wajan saat digunakan.'
+  },
+  'sendok': {
+    kalimat: 'Adik mengaduk gula dengan sendok kecil.',
+    sub: '— Sendok —',
+    inggris: 'My little sibling stirs the sugar with a small spoon.',
+    penjelasan: 'Sendok = spoon. Alat makan berbentuk cekungan kecil dengan pegangan panjang untuk menyendok atau mengaduk.',
+    hubungan: '"Mengaduk" (to stir) adalah kegiatan khas sendok. "Kecil" (small) menunjukkan ukuran — ada sendok teh dan sendok makan.'
+  },
+  'garpu': {
+    kalimat: 'Saya makan mie menggunakan garpu.',
+    sub: '— Garpu —',
+    inggris: 'I eat noodles using a fork.',
+    penjelasan: 'Garpu = fork. Alat makan dengan beberapa gigi runcing untuk menusuk dan mengambil makanan padat.',
+    hubungan: '"Menggunakan" (using/to use) adalah kata penghubung alat. Garpu biasa dipakai bersama pisau di budaya Barat.'
+  },
+  'pisau': {
+    kalimat: 'Ibu memotong sayuran dengan pisau tajam.',
+    sub: '— Pisau —',
+    inggris: 'Mother cuts vegetables with a sharp knife.',
+    penjelasan: 'Pisau = knife. Alat dengan bilah tajam untuk memotong bahan makanan. Pisau dapur berbeda ukuran tergantung kegunaannya.',
+    hubungan: '"Memotong" (to cut) adalah kata kerja utama pisau. "Tajam" (sharp) adalah sifat penting pisau yang baik.'
+  },
+  'piring': {
+    kalimat: 'Kakak meletakkan nasi di atas piring putih.',
+    sub: '— Piring —',
+    inggris: 'My older sibling places rice on a white plate.',
+    penjelasan: 'Piring = plate / dish. Wadah makan datar berbentuk bulat untuk menyajikan makanan. Terbuat dari keramik, melamin, atau plastik.',
+    hubungan: '"Meletakkan" (to place/put) menunjukkan aksi. "Putih" (white) adalah warna piring yang paling umum.'
+  },
+  'gelas': {
+    kalimat: 'Dia menuangkan air mineral ke dalam gelas.',
+    sub: '— Gelas —',
+    inggris: 'He/she pours mineral water into a glass.',
+    penjelasan: 'Gelas = glass / cup. Wadah minum berbentuk silinder untuk minuman. Berbeda dengan "cangkir" yang biasanya punya telinga.',
+    hubungan: '"Menuangkan" (to pour) adalah kegiatan mengisi gelas. "Ke dalam" (into) menunjukkan arah gerakan cairan.'
+  },
+  'mangkuk': {
+    kalimat: 'Nenek menyajikan sup hangat dalam mangkuk besar.',
+    sub: '— Mangkuk —',
+    inggris: 'Grandmother serves warm soup in a large bowl.',
+    penjelasan: 'Mangkuk = bowl. Wadah makan berbentuk cekung dan dalam untuk makanan berkuah seperti sup, bakso, atau bubur.',
+    hubungan: '"Menyajikan" (to serve) digunakan untuk makanan yang dihidangkan. "Hangat" (warm) menggambarkan suhu makanan.'
+  },
+  'talenan': {
+    kalimat: 'Letakkan wortel di atas talenan sebelum dipotong.',
+    sub: '— Talenan —',
+    inggris: 'Place the carrot on the cutting board before cutting.',
+    penjelasan: 'Talenan = cutting board / chopping board. Papan alas untuk memotong sayuran dan bahan masakan agar meja dapur tidak tergores.',
+    hubungan: '"Sebelum" (before) menunjukkan urutan kegiatan. Talenan selalu digunakan bersama pisau dalam memasak.'
+  },
+  'kulkas': {
+    kalimat: 'Simpan buah-buahan segar di dalam kulkas agar tidak layu.',
+    sub: '— Kulkas —',
+    inggris: 'Store fresh fruits in the refrigerator so they do not wither.',
+    penjelasan: 'Kulkas = refrigerator / fridge. Alat elektronik pendingin makanan dan minuman agar tetap segar lebih lama.',
+    hubungan: '"Simpan" (store/keep) menunjukkan kegunaan kulkas. "Agar tidak" (so that... not) menunjukkan tujuan tindakan.'
+  }
+};
+
+const dataAlatKebersihan = {
+  'sapu': {
+    kalimat: 'Ani menyapu lantai setiap pagi sebelum sekolah.',
+    sub: '— Sapu —',
+    inggris: 'Ani sweeps the floor every morning before school.',
+    penjelasan: 'Sapu = broom. Alat kebersihan dari batang panjang dengan rambut/serabut di ujungnya untuk menyapu debu dan kotoran di lantai.',
+    hubungan: '"Menyapu" (to sweep) berasal dari kata "sapu". "Setiap pagi" (every morning) menunjukkan kebiasaan rutin.'
+  },
+  'pel': {
+    kalimat: 'Setelah disapu, lantai dipel hingga bersih dan mengkilap.',
+    sub: '— Pel —',
+    inggris: 'After sweeping, the floor is mopped until clean and shiny.',
+    penjelasan: 'Pel = mop. Alat kebersihan dengan kepala dari kain atau serabut untuk membersihkan lantai dengan air dan sabun.',
+    hubungan: '"Dipel" adalah bentuk pasif dari kata kerja "mengepel". Biasanya digunakan setelah menyapu — urutan membersihkan lantai yang benar.'
+  },
+  'sikat': {
+    kalimat: 'Gunakan sikat gigi dua kali sehari untuk menjaga kesehatan mulut.',
+    sub: '— Sikat —',
+    inggris: 'Use a toothbrush twice a day to maintain oral health.',
+    penjelasan: 'Sikat = brush. Alat dengan bulu-bulu untuk menggosok. "Sikat gigi" = toothbrush, "sikat baju" = clothes brush.',
+    hubungan: '"Dua kali sehari" (twice a day) menunjukkan frekuensi. "Untuk menjaga" (to maintain) menunjukkan tujuan kegiatan.'
+  },
+  'ember': {
+    kalimat: 'Isi ember dengan air bersih untuk mengepel ruangan.',
+    sub: '— Ember —',
+    inggris: 'Fill the bucket with clean water to mop the room.',
+    penjelasan: 'Ember = bucket / pail. Wadah berbentuk silinder dengan pegangan untuk menampung air saat membersihkan atau mencuci.',
+    hubungan: '"Isi" (fill) adalah kata kerja mengisi wadah. "Dengan" (with) adalah kata penghubung antara wadah dan isinya.'
+  },
+  'kain lap': {
+    kalimat: 'Ambil kain lap untuk membersihkan tumpahan air di meja.',
+    sub: '— Kain Lap —',
+    inggris: 'Get a cloth to clean up the water spill on the table.',
+    penjelasan: 'Kain lap = cloth / rag / wipe. Kain yang digunakan untuk mengelap, membersihkan, atau mengeringkan permukaan.',
+    hubungan: '"Tumpahan" (spill) berasal dari kata "tumpah" (to spill). "Di meja" (on the table) menunjukkan lokasi kejadian.'
+  },
+  'sabun': {
+    kalimat: 'Cuci tangan dengan sabun minimal dua puluh detik.',
+    sub: '— Sabun —',
+    inggris: 'Wash your hands with soap for at least twenty seconds.',
+    penjelasan: 'Sabun = soap. Zat pembersih dari bahan kimia atau alami yang menghasilkan busa untuk membunuh kuman dan kotoran.',
+    hubungan: '"Minimal" (at least) menunjukkan batas minimum waktu. "Dua puluh detik" (twenty seconds) adalah standar WHO untuk cuci tangan.'
+  },
+  'tempat sampah': {
+    kalimat: 'Buang sampah plastik ke tempat sampah yang tersedia.',
+    sub: '— Tempat Sampah —',
+    inggris: 'Throw the plastic waste into the available trash can.',
+    penjelasan: 'Tempat sampah = trash can / garbage bin / dustbin. Wadah untuk menampung sampah dan limbah rumah tangga.',
+    hubungan: '"Buang" (to throw/discard) adalah kata kerja membuang benda. "Yang tersedia" (available/provided) menunjukkan keberadaan tempat sampah.'
+  },
+  'vacuum cleaner': {
+    kalimat: 'Ibu menggunakan vacuum cleaner untuk membersihkan karpet.',
+    sub: '— Vacuum Cleaner —',
+    inggris: 'Mother uses a vacuum cleaner to clean the carpet.',
+    penjelasan: 'Vacuum cleaner = penyedot debu. Alat elektronik yang menyedot debu dan kotoran kecil dari lantai, karpet, dan permukaan lainnya.',
+    hubungan: '"Untuk membersihkan" (to clean) menunjukkan tujuan penggunaan alat. Vacuum cleaner lebih efektif dari sapu untuk membersihkan karpet tebal.'
+  }
+};
+
+const dataAlatTulis = {
+  'pensil': {
+    kalimat: 'Tulis nama kamu dengan pensil di pojok kiri atas kertas.',
+    sub: '— Pensil —',
+    inggris: 'Write your name with a pencil in the upper left corner of the paper.',
+    penjelasan: 'Pensil = pencil. Alat tulis dari kayu berisi batang grafit yang bisa dihapus. Cocok untuk menulis, menggambar, dan membuat sketsa.',
+    hubungan: '"Tulis" (write) adalah kata kerja dasar. "Pojok kiri atas" (upper left corner) adalah ungkapan posisi yang sering digunakan.'
+  },
+  'pulpen': {
+    kalimat: 'Tanda tangani surat itu menggunakan pulpen hitam.',
+    sub: '— Pulpen —',
+    inggris: 'Sign the letter using a black pen.',
+    penjelasan: 'Pulpen = pen / ballpoint. Alat tulis berisi tinta cair yang tidak bisa dihapus. Lebih permanen dari pensil.',
+    hubungan: '"Tanda tangani" (to sign) adalah kegiatan resmi yang membutuhkan pulpen. "Hitam" (black) adalah warna tinta yang paling formal.'
+  },
+  'penghapus': {
+    kalimat: 'Hapus kesalahan tulisanmu dengan penghapus bersih.',
+    sub: '— Penghapus —',
+    inggris: 'Erase your writing mistakes with a clean eraser.',
+    penjelasan: 'Penghapus = eraser / rubber. Alat dari karet untuk menghapus tulisan pensil di kertas. "Penghapus" berasal dari kata "hapus" (to erase).',
+    hubungan: '"Kesalahan" (mistake/error) adalah alasan menggunakan penghapus. "Bersih" (clean) menggambarkan kondisi penghapus yang baik.'
+  },
+  'penggaris': {
+    kalimat: 'Tarik garis lurus menggunakan penggaris tiga puluh sentimeter.',
+    sub: '— Penggaris —',
+    inggris: 'Draw a straight line using a thirty-centimeter ruler.',
+    penjelasan: 'Penggaris = ruler. Alat pengukur dan alat bantu menggambar garis lurus dari plastik, kayu, atau logam dengan skala ukuran.',
+    hubungan: '"Garis lurus" (straight line) adalah hasil penggunaan penggaris. "Tiga puluh sentimeter" menunjukkan panjang — penggaris standar sekolah.'
+  },
+  'buku': {
+    kalimat: 'Beli buku tulis baru untuk semester depan.',
+    sub: '— Buku —',
+    inggris: 'Buy a new notebook for next semester.',
+    penjelasan: 'Buku = book. "Buku tulis" = notebook / exercise book. Kumpulan lembaran kertas yang dijilid untuk menulis, membaca, atau mencatat.',
+    hubungan: '"Buku tulis" berbeda dari "buku bacaan" (textbook/storybook). "Semester depan" (next semester) menunjukkan waktu yang akan datang.'
+  },
+  'gunting': {
+    kalimat: 'Potong kertas origami itu dengan gunting sesuai pola.',
+    sub: '— Gunting —',
+    inggris: 'Cut the origami paper with scissors according to the pattern.',
+    penjelasan: 'Gunting = scissors. Alat pemotong dari dua bilah tajam yang terhubung di tengah. Digunakan untuk memotong kertas, kain, dan bahan tipis lainnya.',
+    hubungan: '"Sesuai pola" (according to the pattern) menunjukkan cara memotong yang tepat. Gunting selalu berbentuk jamak dalam bahasa Inggris: "scissors".'
+  },
+  'lem': {
+    kalimat: 'Rekatkan foto tersebut ke album menggunakan lem kertas.',
+    sub: '— Lem —',
+    inggris: 'Stick the photo into the album using paper glue.',
+    penjelasan: 'Lem = glue / adhesive. Zat perekat untuk menempelkan dua permukaan. "Lem kertas" = paper glue, "lem kayu" = wood glue.',
+    hubungan: '"Rekatkan" (to stick/glue) berasal dari kata "rekat" (sticky/adhesive). "Ke album" (into the album) menunjukkan tempat tujuan penempelan.'
+  },
+  'penjepit kertas': {
+    kalimat: 'Satukan dokumen-dokumen itu dengan penjepit kertas.',
+    sub: '— Penjepit Kertas —',
+    inggris: 'Clip those documents together with a paper clip.',
+    penjelasan: 'Penjepit kertas = paper clip / binder clip. Alat logam kecil untuk menyatukan beberapa lembar kertas tanpa melubangi.',
+    hubungan: '"Satukan" (to unite/combine) adalah tujuan penjepit kertas. "Dokumen-dokumen" menunjukkan bentuk jamak dengan pengulangan kata dalam bahasa Indonesia.'
+  }
+};
+
+const dataAlatRumah = {
+  'kursi': {
+    kalimat: 'Silakan duduk di kursi yang nyaman itu.',
+    sub: '— Kursi —',
+    inggris: 'Please sit on that comfortable chair.',
+    penjelasan: 'Kursi = chair. Perabot rumah berbentuk tempat duduk dengan sandaran untuk satu orang. Berbeda dengan "sofa" untuk beberapa orang.',
+    hubungan: '"Silakan" (please) adalah kata sopan untuk mempersilakan. "Nyaman" (comfortable) adalah sifat kualitas kursi yang baik.'
+  },
+  'meja': {
+    kalimat: 'Taruh buku-buku pelajaran di atas meja belajar.',
+    sub: '— Meja —',
+    inggris: 'Put the school books on the study table.',
+    penjelasan: 'Meja = table / desk. Perabot datar dengan kaki-kaki penyangga untuk bekerja, makan, atau menaruh benda. "Meja makan" = dining table, "meja belajar" = study desk.',
+    hubungan: '"Taruh" (put/place) adalah kata kerja untuk meletakkan benda. "Meja belajar" menggabungkan kata "meja" + "belajar" menjadi kata majemuk.'
+  },
+  'lampu': {
+    kalimat: 'Nyalakan lampu ruang tamu karena sudah mulai gelap.',
+    sub: '— Lampu —',
+    inggris: 'Turn on the living room light because it is starting to get dark.',
+    penjelasan: 'Lampu = lamp / light. Alat penerangan yang mengubah listrik menjadi cahaya. "Nyalakan" = turn on, "matikan" = turn off.',
+    hubungan: '"Karena" (because) adalah kata penghubung sebab-akibat. "Sudah mulai gelap" (starting to get dark) adalah alasan menyalakan lampu.'
+  },
+  'kasur': {
+    kalimat: 'Bereskan kasur setiap bangun tidur di pagi hari.',
+    sub: '— Kasur —',
+    inggris: 'Make the bed every time you wake up in the morning.',
+    penjelasan: 'Kasur = mattress / bed. Alas tidur yang tebal dan empuk. "Kasur" merujuk pada alas tidurnya, sedangkan "tempat tidur" = bed (termasuk rangkanya).',
+    hubungan: '"Bereskan" (to tidy up / make the bed) adalah kegiatan merawat kasur. "Setiap bangun tidur" (every time you wake up) menunjukkan kebiasaan yang diharapkan.'
+  },
+  'lemari': {
+    kalimat: 'Lipat dan simpan pakaian bersih ke dalam lemari.',
+    sub: '— Lemari —',
+    inggris: 'Fold and store clean clothes into the wardrobe.',
+    penjelasan: 'Lemari = wardrobe / cabinet / closet. Perabot berpintu untuk menyimpan pakaian, buku, atau peralatan. "Lemari es" = refrigerator.',
+    hubungan: '"Lipat dan simpan" adalah dua kata kerja berurutan. "Bersih" (clean) menunjukkan kondisi pakaian sebelum disimpan — bukan pakaian kotor.'
+  },
+  'kipas angin': {
+    kalimat: 'Hidupkan kipas angin karena udara di kamar sangat panas.',
+    sub: '— Kipas Angin —',
+    inggris: 'Turn on the fan because the air in the room is very hot.',
+    penjelasan: 'Kipas angin = electric fan. Alat elektronik yang menghasilkan angin buatan untuk mendinginkan ruangan. Berbeda dari "AC" (air conditioner).',
+    hubungan: '"Hidupkan" = "nyalakan" (turn on). "Sangat panas" (very hot) menggunakan "sangat" untuk memperkuat kata sifat — setara dengan "very" dalam Inggris.'
+  },
+  'pintu': {
+    kalimat: 'Tolong tutup pintu dengan pelan agar tidak berisik.',
+    sub: '— Pintu —',
+    inggris: 'Please close the door gently so it is not noisy.',
+    penjelasan: 'Pintu = door. Bagian rumah yang dapat dibuka dan ditutup sebagai akses masuk-keluar ruangan.',
+    hubungan: '"Dengan pelan" (gently / softly) menunjukkan cara melakukan. "Agar tidak berisik" (so that it is not noisy) menunjukkan tujuan — kata "agar" = "so that".'
+  },
+  'jendela': {
+    kalimat: 'Buka jendela agar udara segar masuk ke dalam kamar.',
+    sub: '— Jendela —',
+    inggris: 'Open the window so that fresh air enters the room.',
+    penjelasan: 'Jendela = window. Bukaan di dinding rumah yang dapat dibuka-tutup untuk sirkulasi udara dan cahaya alami.',
+    hubungan: '"Agar udara segar masuk" = "so that fresh air enters" — "agar" selalu diikuti tujuan yang diinginkan. Bandingkan "buka" (open) vs "tutup" (close).'
+  }
+};
+
+const dataMakanBuah = {
+  'apel': {
+    kalimat: 'Saya ingin membeli buah apel merah di pasar.',
+    sub: '— Apel —',
+    inggris: 'I want to buy red apples at the market.',
+    penjelasan: 'Apel = apple. Buah bulat berwarna merah, hijau, atau kuning dengan rasa manis-asam. Kaya vitamin C dan serat.',
+    hubungan: '"Ingin membeli" (want to buy) menunjukkan keinginan. "Di pasar" (at the market) adalah tempat membeli buah segar.'
+  },
+  'pisang': {
+    kalimat: 'Makan dua pisang setiap hari baik untuk kesehatan.',
+    sub: '— Pisang —',
+    inggris: 'Eating two bananas every day is good for health.',
+    penjelasan: 'Pisang = banana. Buah tropis panjang berwarna kuning, kaya kalium dan energi. Salah satu buah paling populer di Indonesia.',
+    hubungan: '"Baik untuk" (good for) adalah ungkapan manfaat. Subjek kalimat ini adalah "makan dua pisang" — frasa kata kerja sebagai subjek.'
+  },
+  'mangga': {
+    kalimat: 'Mangga harum manis dari pohon di kebun sangat lezat.',
+    sub: '— Mangga —',
+    inggris: 'The sweet fragrant mangoes from the garden tree are very delicious.',
+    penjelasan: 'Mangga = mango. Buah tropis berdaging tebal dengan biji pipih di tengah. "Mangga harum manis" adalah nama varietas populer di Indonesia.',
+    hubungan: '"Harum manis" = dua kata sifat yang menggambarkan rasa dan aroma. "Sangat lezat" (very delicious) menggunakan "sangat" sebagai penguat.'
+  },
+  'jeruk': {
+    kalimat: 'Peras jeruk segar untuk membuat jus tanpa tambahan gula.',
+    sub: '— Jeruk —',
+    inggris: 'Squeeze fresh oranges to make juice without added sugar.',
+    penjelasan: 'Jeruk = orange / citrus. Buah bulat berwarna oranye dengan kulit tebal. Kaya vitamin C. "Jeruk nipis" = lime, "jeruk lemon" = lemon.',
+    hubungan: '"Tanpa tambahan gula" (without added sugar) = gaya hidup sehat. "Peras" (to squeeze) adalah kata kerja khusus untuk buah-buahan berair.'
+  },
+  'semangka': {
+    kalimat: 'Potong semangka besar itu menjadi delapan bagian yang sama.',
+    sub: '— Semangka —',
+    inggris: 'Cut that large watermelon into eight equal pieces.',
+    penjelasan: 'Semangka = watermelon. Buah besar berwarna hijau di luar dan merah di dalam, sangat berair dan menyegarkan. Populer di musim panas.',
+    hubungan: '"Menjadi" (into / become) menunjukkan perubahan bentuk. "Delapan bagian yang sama" (eight equal pieces) menggunakan "yang sama" untuk kesetaraan.'
+  },
+  'anggur': {
+    kalimat: 'Nenek membeli setangkai anggur ungu untuk dibuat jus.',
+    sub: '— Anggur —',
+    inggris: 'Grandmother bought a bunch of purple grapes to make juice.',
+    penjelasan: 'Anggur = grape. Buah kecil bulat yang tumbuh berkelompok dalam satu tangkai. Ada yang berwarna hijau, merah, atau ungu.',
+    hubungan: '"Setangkai" adalah kata satuan khusus untuk anggur (one bunch). "Untuk dibuat" = passive infinitive — tujuan pembelian.'
+  },
+  'nanas': {
+    kalimat: 'Nanas segar cocok dijadikan campuran salad buah.',
+    sub: '— Nanas —',
+    inggris: 'Fresh pineapple is suitable to be used as a fruit salad mix.',
+    penjelasan: 'Nanas = pineapple. Buah tropis berduri di luar dengan daging kuning-manis di dalam. Mengandung enzim bromelain yang baik untuk pencernaan.',
+    hubungan: '"Cocok dijadikan" (suitable to be used as) menunjukkan kesesuaian fungsi. "Campuran" (mixture/mix) berasal dari kata "campur" (to mix).'
+  },
+  'pepaya': {
+    kalimat: 'Pepaya matang dimakan setiap pagi untuk melancarkan pencernaan.',
+    sub: '— Pepaya —',
+    inggris: 'Ripe papaya is eaten every morning to improve digestion.',
+    penjelasan: 'Pepaya = papaya. Buah tropis besar berwarna oranye-kemerahan di dalam. Kaya vitamin A, C, dan enzim papain untuk pencernaan.',
+    hubungan: '"Matang" (ripe) adalah kata sifat penting untuk buah — lawannya "mentah" (unripe). "Melancarkan" (to improve/smoothen) berasal dari kata "lancar" (smooth).'
+  }
+};
+
+const dataMakanSayur = {
+  'wortel': {
+    kalimat: 'Ibu menambahkan wortel ke dalam sup ayam yang sedang dimasak.',
+    sub: '— Wortel —',
+    inggris: 'Mother adds carrots to the chicken soup being cooked.',
+    penjelasan: 'Wortel = carrot. Sayuran akar berwarna oranye cerah, kaya beta-karoten dan vitamin A. Bisa dimakan mentah atau dimasak.',
+    hubungan: '"Menambahkan ke dalam" (to add into) menunjukkan proses memasak. "Yang sedang dimasak" (being cooked) adalah klausa relatif yang menerangkan sup.'
+  },
+  'bayam': {
+    kalimat: 'Makan sayur bayam setiap hari membuat tubuh kuat dan sehat.',
+    sub: '— Bayam —',
+    inggris: 'Eating spinach every day makes the body strong and healthy.',
+    penjelasan: 'Bayam = spinach. Sayuran berdaun hijau gelap, kaya zat besi, kalsium, dan vitamin. Bisa dibuat sup, tumisan, atau lalapan.',
+    hubungan: '"Membuat" (to make) di sini berarti menyebabkan kondisi. "Kuat dan sehat" (strong and healthy) adalah dua kata sifat yang digabung dengan "dan" (and).'
+  },
+  'tomat': {
+    kalimat: 'Irisan tomat segar membuat salad terasa lebih segar dan berwarna.',
+    sub: '— Tomat —',
+    inggris: 'Sliced fresh tomatoes make the salad taste fresher and more colorful.',
+    penjelasan: 'Tomat = tomato. Secara botani adalah buah, tapi digunakan sebagai sayuran dalam masakan. Kaya likopen dan vitamin C.',
+    hubungan: '"Irisan" (slices) berasal dari kata "iris" (to slice). "Lebih segar" (fresher) menggunakan "lebih" untuk perbandingan — setara dengan "-er" dalam Inggris.'
+  },
+  'kangkung': {
+    kalimat: 'Tumis kangkung dengan bawang putih dan cabai terasa sangat enak.',
+    sub: '— Kangkung —',
+    inggris: 'Stir-fried water spinach with garlic and chili tastes very delicious.',
+    penjelasan: 'Kangkung = water spinach / morning glory. Sayuran hijau batang berongga yang populer di Asia Tenggara. Biasanya ditumis.',
+    hubungan: '"Dengan" (with) menghubungkan bahan-bahan masakan. "Bawang putih" (garlic) dan "cabai" (chili) adalah bumbu dasar tumisan Indonesia.'
+  },
+  'kubis': {
+    kalimat: 'Iris tipis kubis segar untuk dijadikan lalapan pendamping nasi.',
+    sub: '— Kubis —',
+    inggris: 'Thinly slice fresh cabbage to be used as a fresh vegetable side dish.',
+    penjelasan: 'Kubis = cabbage. Sayuran bulat berlapis-lapis daun. Bisa dimakan mentah (lalapan), ditumis, atau dijadikan acar.',
+    hubungan: '"Iris tipis" (thinly slice) = cara memotong dengan ketebalan tertentu. "Pendamping nasi" (side dish with rice) menunjukkan fungsi lalapan dalam makanan Indonesia.'
+  },
+  'bawang merah': {
+    kalimat: 'Tumis bawang merah dulu sebelum memasukkan bahan lainnya.',
+    sub: '— Bawang Merah —',
+    inggris: 'Sauté the shallots first before adding the other ingredients.',
+    penjelasan: 'Bawang merah = shallot. Bumbu dasar masakan Indonesia berasa tajam dan harum. Berbeda dari "bawang bombay" (onion) yang lebih besar.',
+    hubungan: '"Dulu" (first) menunjukkan urutan memasak. "Sebelum memasukkan" (before adding) = urutan kegiatan — bawang merah selalu ditumis pertama.'
+  },
+  'cabai': {
+    kalimat: 'Tambahkan dua cabai merah agar masakan terasa lebih pedas.',
+    sub: '— Cabai —',
+    inggris: 'Add two red chilies to make the dish taste spicier.',
+    penjelasan: 'Cabai = chili / chilli. Buah pedas dari tanaman Capsicum, digunakan sebagai bumbu. "Cabai merah" = red chili, "cabai rawit" = bird\'s eye chili (paling pedas).',
+    hubungan: '"Agar... terasa lebih pedas" = so that it tastes spicier. Kata "pedas" (spicy/hot) adalah kata sifat rasa yang khas masakan Asia.'
+  }
+};
+
+const dataMakanMasakan = {
+  'nasi goreng': {
+    kalimat: 'Nasi goreng spesial dengan telur mata sapi adalah sarapan favoritku.',
+    sub: '— Nasi Goreng —',
+    inggris: 'Special fried rice with a sunny-side-up egg is my favorite breakfast.',
+    penjelasan: 'Nasi goreng = fried rice. Masakan Indonesia populer dari nasi sisa yang digoreng dengan bumbu, kecap, dan berbagai topping.',
+    hubungan: '"Spesial" menunjukkan versi yang lebih lengkap. "Telur mata sapi" = sunny-side-up egg (telur yang digoreng utuh tanpa dibalik).'
+  },
+  'soto': {
+    kalimat: 'Semangkuk soto ayam panas cocok dimakan saat hujan turun.',
+    sub: '— Soto —',
+    inggris: 'A bowl of hot chicken soto is perfect to eat when the rain falls.',
+    penjelasan: 'Soto = Indonesian spiced soup. Sup khas Indonesia berkuah kuning atau bening dengan ayam, bumbu rempah, dan berbagai pelengkap.',
+    hubungan: '"Semangkuk" = one bowl — "se-" berarti satu dalam kombinasi kata. "Saat hujan turun" (when the rain falls) adalah konteks waktu yang populer untuk makanan hangat.'
+  },
+  'gado-gado': {
+    kalimat: 'Gado-gado dengan saus kacang kental adalah makanan vegetarian yang lezat.',
+    sub: '— Gado-gado —',
+    inggris: 'Gado-gado with thick peanut sauce is a delicious vegetarian dish.',
+    penjelasan: 'Gado-gado = Indonesian peanut sauce salad. Makanan Indonesia dari sayuran rebus, tahu, tempe, telur, dan siraman saus kacang.',
+    hubungan: '"Kental" (thick) vs "encer" (thin/watery) — kata sifat konsistensi cairan. "Vegetarian" adalah kata serapan dari bahasa Inggris.'
+  },
+  'rendang': {
+    kalimat: 'Rendang daging sapi buatan ibu dimasak selama tiga jam.',
+    sub: '— Rendang —',
+    inggris: 'Mother\'s beef rendang is cooked for three hours.',
+    penjelasan: 'Rendang = slow-cooked spiced beef. Masakan Minangkabau yang dinobatkan sebagai salah satu makanan terenak di dunia. Dimasak lama hingga bumbu meresap.',
+    hubungan: '"Selama tiga jam" (for three hours) menunjukkan durasi memasak. "Buatan ibu" (mother\'s making) = "ibu" + akhiran kepunyaan — setara dengan "Mother\'s" dalam Inggris.'
+  },
+  'mie goreng': {
+    kalimat: 'Adik meminta dibuatkan mie goreng dengan tambahan bakso.',
+    sub: '— Mie Goreng —',
+    inggris: 'My little sibling asked to have fried noodles made with extra meatballs.',
+    penjelasan: 'Mie goreng = fried noodles. Makanan dari mie yang digoreng dengan sayuran, bumbu, kecap, dan berbagai topping sesuai selera.',
+    hubungan: '"Meminta dibuatkan" = asking someone to make — bentuk pasif permintaan. "Tambahan" (extra/additional) menunjukkan bahan yang ditambah di luar biasanya.'
+  },
+  'sate': {
+    kalimat: 'Beli dua puluh tusuk sate ayam dengan bumbu kacang.',
+    sub: '— Sate —',
+    inggris: 'Buy twenty skewers of chicken satay with peanut sauce.',
+    penjelasan: 'Sate = satay. Makanan dari potongan daging yang ditusuk ke tusukan bambu lalu dibakar. Disajikan dengan bumbu kacang atau kecap.',
+    hubungan: '"Tusuk" = skewer (alat) atau to skewer (kata kerja). "Dua puluh tusuk" — "tusuk" di sini sebagai kata satuan jumlah sate.'
+  },
+  'bakso': {
+    kalimat: 'Kuah bakso yang panas dan gurih terasa nikmat di musim hujan.',
+    sub: '— Bakso —',
+    inggris: 'The hot and savory meatball soup broth tastes delicious in the rainy season.',
+    penjelasan: 'Bakso = meatball soup. Bola-bola daging yang disajikan dalam kuah kaldu panas dengan mie, bihun, dan pelengkap lainnya.',
+    hubungan: '"Panas dan gurih" (hot and savory) = dua kata sifat bersamaan. "Musim hujan" (rainy season) — Indonesia hanya punya dua musim: hujan dan kemarau.'
+  }
+};
+
+const dataMakanMinuman = {
+  'air putih': {
+    kalimat: 'Minum delapan gelas air putih setiap hari untuk kesehatan tubuh.',
+    sub: '— Air Putih —',
+    inggris: 'Drink eight glasses of plain water every day for body health.',
+    penjelasan: 'Air putih = plain water / drinking water. Air minum tanpa rasa atau warna. "Putih" di sini tidak berarti berwarna putih, tapi berarti bersih/murni.',
+    hubungan: '"Delapan gelas" (eight glasses) = ukuran standar kesehatan. "Untuk kesehatan" (for health) menunjukkan manfaat — "untuk" diikuti kata benda atau kata kerja.'
+  },
+  'teh': {
+    kalimat: 'Segelas teh hangat dengan sedikit gula menenangkan pikiran.',
+    sub: '— Teh —',
+    inggris: 'A glass of warm tea with a little sugar calms the mind.',
+    penjelasan: 'Teh = tea. Minuman dari daun tanaman Camellia sinensis yang diseduh. Ada teh hijau, hitam, putih, dan oolong.',
+    hubungan: '"Segelas" = one glass (se- = satu). "Dengan sedikit gula" (with a little sugar) — "sedikit" (a little/few) menunjukkan jumlah kecil.'
+  },
+  'kopi': {
+    kalimat: 'Ayah selalu minum secangkir kopi hitam setiap pagi.',
+    sub: '— Kopi —',
+    inggris: 'Father always drinks a cup of black coffee every morning.',
+    penjelasan: 'Kopi = coffee. Minuman dari biji kopi yang disangrai dan diseduh. Indonesia adalah produsen kopi terbesar ke-4 di dunia.',
+    hubungan: '"Selalu" (always) menunjukkan kebiasaan yang tidak pernah berubah. "Secangkir" = one cup — "cangkir" adalah wadah minuman panas bertangkai.'
+  },
+  'jus': {
+    kalimat: 'Buat jus alpukat segar dengan susu dan sedikit madu.',
+    sub: '— Jus —',
+    inggris: 'Make fresh avocado juice with milk and a little honey.',
+    penjelasan: 'Jus = juice. Minuman dari buah atau sayuran yang diblender atau diperas. Kata "jus" adalah serapan dari bahasa Inggris/Prancis.',
+    hubungan: '"Dengan susu dan sedikit madu" (with milk and a little honey) = bahan tambahan. "Sedikit madu" (a little honey) — madu sebagai pemanis alami.'
+  },
+  'susu': {
+    kalimat: 'Anak-anak wajib minum susu dua kali sehari untuk pertumbuhan tulang.',
+    sub: '— Susu —',
+    inggris: 'Children must drink milk twice a day for bone growth.',
+    penjelasan: 'Susu = milk. Minuman bergizi dari sapi atau tumbuhan (susu kedelai, susu almond). Kaya kalsium dan protein untuk pertumbuhan.',
+    hubungan: '"Wajib" (must/obligatory) menunjukkan kewajiban yang lebih kuat dari "harus". "Untuk pertumbuhan tulang" (for bone growth) = tujuan yang spesifik.'
+  },
+  'es teh': {
+    kalimat: 'Pesan dua es teh manis untuk kami berdua, ya.',
+    sub: '— Es Teh —',
+    inggris: 'Order two sweet iced teas for both of us, please.',
+    penjelasan: 'Es teh = iced tea. Teh yang disajikan dengan es batu dan gula — minuman paling populer di warung makan Indonesia.',
+    hubungan: '"Kami berdua" (both of us) = "kami" (we/us) + "berdua" (two people together). "Ya" di akhir kalimat = softener — membuat permintaan terdengar lebih santai.'
+  },
+  'sirup': {
+    kalimat: 'Tambahkan dua sendok sirup ke dalam air dingin dan aduk rata.',
+    sub: '— Sirup —',
+    inggris: 'Add two spoons of syrup into cold water and stir evenly.',
+    penjelasan: 'Sirup = syrup. Cairan gula kental berperisa buah untuk membuat minuman. Sirup merah (coco pandan) dan sirup jeruk sangat populer di Indonesia.',
+    hubungan: '"Aduk rata" (stir evenly) — "rata" (even/level) menunjukkan cara mengaduk hingga tercampur sempurna.'
+  }
+};
+
+const dataAngkaBilangan = {
+  'satu': {
+    kalimat: 'Satu ditambah satu sama dengan dua.',
+    sub: '— 1 —',
+    inggris: 'One plus one equals two.',
+    penjelasan: 'Satu = one (1). Bilangan bulat pertama dalam urutan angka. "Se-" adalah awalan yang berarti satu: seorang, sebuah, selembar.',
+    hubungan: '"Ditambah" (plus/added by) = operasi penjumlahan. "Sama dengan" (equals) = tanda "=" dalam matematika.'
+  },
+  'dua': {
+    kalimat: 'Ada dua jalan menuju kota — melalui tol atau jalan biasa.',
+    sub: '— 2 —',
+    inggris: 'There are two roads to the city — through the toll road or the regular road.',
+    penjelasan: 'Dua = two (2). Bilangan genap pertama. "Berdua" = two people together, "keduanya" = both of them.',
+    hubungan: '"Ada" (there is/are) digunakan untuk menyatakan keberadaan. "Atau" (or) adalah kata penghubung pilihan — setara dengan "or" dalam Inggris.'
+  },
+  'lima': {
+    kalimat: 'Kelas kami memiliki lima kelompok belajar dengan empat orang setiap kelompok.',
+    sub: '— 5 —',
+    inggris: 'Our class has five study groups with four people in each group.',
+    penjelasan: 'Lima = five (5). "Berlima" = five people together, "kelima" = the fifth (urutan).',
+    hubungan: '"Setiap kelompok" (each group) = per kelompok. "Memiliki" (to have/possess) adalah kata kerja kepemilikan formal.'
+  },
+  'sepuluh': {
+    kalimat: 'Hitung dari satu sampai sepuluh dengan keras dan jelas.',
+    sub: '— 10 —',
+    inggris: 'Count from one to ten loudly and clearly.',
+    penjelasan: 'Sepuluh = ten (10). "Se-" (satu) + "puluh" = sepuluh. Basis sistem bilangan desimal.',
+    hubungan: '"Dari... sampai..." (from... to...) = rentang urutan. "Dengan keras dan jelas" (loudly and clearly) = dua cara melakukan sesuatu sekaligus.'
+  },
+  'seratus': {
+    kalimat: 'Ibu membeli seratus lembar kertas untuk keperluan kantor.',
+    sub: '— 100 —',
+    inggris: 'Mother bought one hundred sheets of paper for office needs.',
+    penjelasan: 'Seratus = one hundred (100). "Se-" + "ratus" = seratus. "Ratus" adalah satuan ratusan dalam bahasa Indonesia.',
+    hubungan: '"Lembar" adalah kata satuan untuk benda tipis seperti kertas, kain. "Keperluan" (needs/requirements) berasal dari kata "perlu" (necessary/needed).'
+  },
+  'seribu': {
+    kalimat: 'Sebuah pulpen seharga seribu rupiah tentu kualitasnya kurang baik.',
+    sub: '— 1.000 —',
+    inggris: 'A pen priced at one thousand rupiah certainly has poor quality.',
+    penjelasan: 'Seribu = one thousand (1.000). "Se-" + "ribu" = seribu. Awalan "se-" khusus untuk seratus, seribu, sejuta, semiliar.',
+    hubungan: '"Seharga" (priced at / worth) = "se-" + "harga" (price). "Tentu" (certainly/of course) menunjukkan kesimpulan yang dianggap sudah jelas.'
+  },
+  'sejuta': {
+    kalimat: 'Mimpinya sederhana — menabung sejuta rupiah setiap bulan.',
+    sub: '— 1.000.000 —',
+    inggris: 'His dream is simple — to save one million rupiah every month.',
+    penjelasan: 'Sejuta = one million (1.000.000). "Se-" + "juta" = sejuta. Juta adalah satuan bilangan besar pertama yang sering digunakan sehari-hari.',
+    hubungan: '"Menabung" (to save money) adalah kata kerja finansial penting. "Setiap bulan" (every month) = monthly — menunjukkan kebiasaan rutin.'
+  }
+};
+
+const dataAngkaUrutan = {
+  'pertama': {
+    kalimat: 'Dia meraih juara pertama dalam lomba lari tingkat nasional.',
+    sub: '— 1st —',
+    inggris: 'He/she won first place in the national running competition.',
+    penjelasan: 'Pertama = first (1st). Bilangan urutan = ordinal number. Dibentuk dengan awalan "ke-": kedua, ketiga, keempat... kecuali "pertama" yang tidak memakai "ke-".',
+    hubungan: '"Meraih" (to achieve/win) lebih formal dari "mendapat". "Tingkat nasional" (national level) menunjukkan cakupan kompetisi.'
+  },
+  'kedua': {
+    kalimat: 'Anak kedua dalam keluarga sering disebut sebagai penengah.',
+    sub: '— 2nd —',
+    inggris: 'The second child in the family is often called the mediator.',
+    penjelasan: 'Kedua = second (2nd). "Ke-" + "dua" = kedua. Juga berarti "both": "keduanya pergi" = "both of them went".',
+    hubungan: '"Sering disebut" (often called) = bentuk pasif untuk menyatakan anggapan umum. "Penengah" (mediator) = orang yang mendamaikan perselisihan.'
+  },
+  'ketiga': {
+    kalimat: 'Ini adalah kesempatan ketiga yang diberikan — jangan sia-siakan.',
+    sub: '— 3rd —',
+    inggris: 'This is the third chance given — do not waste it.',
+    penjelasan: 'Ketiga = third (3rd). "Ke-" + "tiga" = ketiga. Pola ini konsisten untuk semua urutan kecuali "pertama".',
+    hubungan: '"Kesempatan" (chance/opportunity) adalah kata benda penting. "Jangan sia-siakan" (do not waste) = nasihat menggunakan "jangan" + kata kerja.'
+  },
+  'terakhir': {
+    kalimat: 'Gunakan kesempatan terakhir ini sebaik-baiknya.',
+    sub: '— Last —',
+    inggris: 'Use this last opportunity as best as possible.',
+    penjelasan: 'Terakhir = last / final. Berbeda dengan urutan angka biasa, "terakhir" merujuk pada yang paling akhir tanpa menyebut angkanya.',
+    hubungan: '"Sebaik-baiknya" = as best as possible — pengulangan kata sifat menunjukkan tingkat maksimal. Pola ini khas bahasa Indonesia: "sebesar-besarnya", "secepat-cepatnya".'
+  },
+  'kesepuluh': {
+    kalimat: 'Siswa kesepuluh yang mendaftar mendapatkan hadiah kejutan.',
+    sub: '— 10th —',
+    inggris: 'The tenth student to register received a surprise gift.',
+    penjelasan: 'Kesepuluh = tenth (10th). "Ke-" + "sepuluh" = kesepuluh. Pola pembentukan bilangan urutan dari 1 sampai tak terhingga sangat teratur.',
+    hubungan: '"Yang mendaftar" (who registered) = klausa relatif — kata "yang" setara dengan "who/which/that" dalam Inggris.'
+  }
+};
+
+const dataAngkaJumlah = {
+  'beberapa': {
+    kalimat: 'Beberapa teman datang membantu saat kami pindahan rumah.',
+    sub: '— Beberapa —',
+    inggris: 'Several friends came to help when we moved house.',
+    penjelasan: 'Beberapa = several / some / a few. Kata jumlah yang tidak menunjukkan angka pasti — lebih dari satu tapi tidak banyak.',
+    hubungan: '"Saat kami pindahan" (when we moved) = klausa waktu. "Pindahan" berasal dari "pindah" (to move) — bentuk kata benda dari kata kerja.'
+  },
+  'banyak': {
+    kalimat: 'Banyak orang antri membeli tiket konser sejak pagi buta.',
+    sub: '— Banyak —',
+    inggris: 'Many people queued to buy concert tickets since the crack of dawn.',
+    penjelasan: 'Banyak = many / a lot of / much. Kata jumlah yang menunjukkan angka besar. "Banyak" untuk semua jenis benda — berbeda dari Inggris yang membedakan "many" dan "much".',
+    hubungan: '"Sejak pagi buta" (since the crack of dawn) = ungkapan waktu untuk sangat pagi. "Antri" (to queue) adalah kata kerja berbaris menunggu giliran.'
+  },
+  'sedikit': {
+    kalimat: 'Masih ada sedikit waktu sebelum pertunjukan dimulai.',
+    sub: '— Sedikit —',
+    inggris: 'There is still a little time before the show starts.',
+    penjelasan: 'Sedikit = a little / a few / not much. Kata jumlah yang menunjukkan angka kecil. "Sedikit" untuk semua jenis — tidak membedakan "a little" dan "a few" seperti Inggris.',
+    hubungan: '"Masih ada" (there is still) = "masih" menunjukkan bahwa sesuatu belum habis. "Sebelum... dimulai" (before... starts) = klausa waktu dengan kata kerja pasif.'
+  },
+  'semua': {
+    kalimat: 'Semua siswa harus hadir pada upacara bendera hari Senin.',
+    sub: '— Semua —',
+    inggris: 'All students must attend the flag ceremony on Monday.',
+    penjelasan: 'Semua = all / every / everyone. Menunjukkan keseluruhan tanpa pengecualian. "Semua orang" = everyone, "semua benda" = everything.',
+    hubungan: '"Harus hadir" (must attend) = kewajiban. "Upacara bendera" (flag ceremony) adalah tradisi sekolah Indonesia setiap Senin pagi.'
+  },
+  'cukup': {
+    kalimat: 'Uang di dompetku cukup untuk membeli makan siang.',
+    sub: '— Cukup —',
+    inggris: 'The money in my wallet is enough to buy lunch.',
+    penjelasan: 'Cukup = enough / sufficient. Menunjukkan jumlah yang pas — tidak kurang dan tidak perlu lebih. Lawannya "kurang" (insufficient) atau "lebih" (excessive).',
+    hubungan: '"Di dompetku" (in my wallet) = "di" (in/at) + "dompet" (wallet) + "-ku" (my). Sufiks "-ku" adalah bentuk singkat dari "saya" untuk kepunyaan.'
+  }
+};
+
+const dataAngkaWaktu = {
+  'jam tiga': {
+    kalimat: 'Kelas tambahan dimulai tepat jam tiga sore.',
+    sub: '— 15:00 —',
+    inggris: 'The extra class starts exactly at three o\'clock in the afternoon.',
+    penjelasan: 'Jam tiga = three o\'clock (15:00). "Jam" = o\'clock / hour. Bahasa Indonesia menggunakan "jam" untuk menyebut waktu — tidak menggunakan sistem 12 jam atau 24 jam secara baku.',
+    hubungan: '"Tepat" (exactly / on the dot) menekankan ketepatan waktu. "Sore" (afternoon/evening, 15:00-18:00) — Indonesia membagi hari: pagi, siang, sore, malam.'
+  },
+  'setengah': {
+    kalimat: 'Acara dimulai setengah delapan malam, jangan terlambat.',
+    sub: '— 19:30 —',
+    inggris: 'The event starts at half past seven in the evening, do not be late.',
+    penjelasan: 'Setengah delapan = half past seven (07:30 atau 19:30). PERHATIAN: "setengah delapan" artinya 30 menit MENUJU jam 8, bukan jam 8 lebih 30 menit!',
+    hubungan: 'Ini perbedaan penting! "Setengah delapan" = 7:30 (Indonesia) vs "half past eight" = 8:30 (Inggris). Sistem Indonesia menghitung maju ke jam berikutnya.'
+  },
+  'kemarin': {
+    kalimat: 'Kemarin kami pergi ke museum dan melihat pameran seni modern.',
+    sub: '— Yesterday —',
+    inggris: 'Yesterday we went to the museum and saw a modern art exhibition.',
+    penjelasan: 'Kemarin = yesterday. Kata waktu yang merujuk pada hari sebelum hari ini. "Kemarin lusa" = two days ago, "kemarin pagi" = yesterday morning.',
+    hubungan: '"Pergi ke" (went to) = kata kerja + preposisi tempat. "Melihat pameran" (saw an exhibition) = "melihat" (to see/watch) lebih umum dari "menonton" yang untuk pertunjukan.'
+  },
+  'besok': {
+    kalimat: 'Besok adalah hari ujian, belajar dengan sungguh-sungguh malam ini.',
+    sub: '— Tomorrow —',
+    inggris: 'Tomorrow is the exam day, study seriously tonight.',
+    penjelasan: 'Besok = tomorrow. Kata waktu yang merujuk pada hari setelah hari ini. "Besok lusa" = two days from now, "besok pagi" = tomorrow morning.',
+    hubungan: '"Dengan sungguh-sungguh" (seriously/wholeheartedly) = pengulangan kata "sungguh" untuk menguatkan makna. Ini pola khas bahasa Indonesia.'
+  },
+  'minggu depan': {
+    kalimat: 'Minggu depan seluruh keluarga akan liburan ke Bali selama tiga hari.',
+    sub: '— Next Week —',
+    inggris: 'Next week the whole family will vacation in Bali for three days.',
+    penjelasan: 'Minggu depan = next week. "Minggu" bisa berarti "week" atau "Sunday (Ahad)". "Depan" (front/next) digunakan untuk waktu yang akan datang.',
+    hubungan: '"Selama tiga hari" (for three days) = durasi waktu menggunakan "selama" (for/during). "Akan" (will) menunjukkan rencana di masa depan.'
+  }
+};
+
+const dataWarnaWarnadasar = {
+  'merah': {
+    kalimat: 'Lampu lalu lintas berwarna merah berarti kendaraan harus berhenti.',
+    sub: '— Merah / Red —',
+    inggris: 'A red traffic light means vehicles must stop.',
+    penjelasan: 'Merah = red. Warna dasar pertama dalam roda warna. Melambangkan keberanian, bahaya, dan semangat. Salah satu warna bendera Indonesia.',
+    hubungan: '"Berwarna" (colored / to be the color of) = "ber-" + "warna". "Berarti" (means) adalah kata penghubung definisi atau makna.'
+  },
+  'biru': {
+    kalimat: 'Langit biru cerah hari ini pertanda cuaca yang bagus.',
+    sub: '— Biru / Blue —',
+    inggris: 'The clear blue sky today is a sign of good weather.',
+    penjelasan: 'Biru = blue. Warna langit dan laut. "Biru muda" = light blue, "biru tua" = dark blue, "biru langit" = sky blue.',
+    hubungan: '"Pertanda" (a sign of / indication) menghubungkan fenomena dengan maknanya. "Cerah" (clear/bright) menggambarkan kondisi langit.'
+  },
+  'kuning': {
+    kalimat: 'Bunga matahari berwarna kuning cerah bermekaran di kebun.',
+    sub: '— Kuning / Yellow —',
+    inggris: 'Bright yellow sunflowers are blooming in the garden.',
+    penjelasan: 'Kuning = yellow. Warna cerah yang melambangkan keceriaan dan kehangatan. "Kuning emas" = golden yellow.',
+    hubungan: '"Bermekaran" (blooming) = "ber-" + "mekar" (to bloom) — awalan "ber-" menunjukkan proses. "Di kebun" (in the garden) = lokasi.'
+  },
+  'hijau': {
+    kalimat: 'Daun-daun hijau segar tumbuh setelah hujan deras kemarin.',
+    sub: '— Hijau / Green —',
+    inggris: 'Fresh green leaves grow after the heavy rain yesterday.',
+    penjelasan: 'Hijau = green. Warna alam dan pertumbuhan. "Hijau tua" = dark green, "hijau muda" = light green, "hijau toska" = teal.',
+    hubungan: '"Setelah hujan deras" (after the heavy rain) = klausa waktu. "Deras" (heavy/torrential) khusus digunakan untuk hujan atau aliran air yang kuat.'
+  },
+  'putih': {
+    kalimat: 'Seragam dokter berwarna putih melambangkan kebersihan dan kepercayaan.',
+    sub: '— Putih / White —',
+    inggris: 'The white doctor\'s uniform symbolizes cleanliness and trust.',
+    penjelasan: 'Putih = white. Warna yang melambangkan kemurnian, kebersihan, dan netralitas. Warna putih adalah warna kedua pada bendera Indonesia.',
+    hubungan: '"Melambangkan" (to symbolize / to represent) = kata kerja pemaknaan simbol. "Kepercayaan" (trust) berasal dari "percaya" (to trust/believe).'
+  },
+  'hitam': {
+    kalimat: 'Langit hitam pekat menandakan badai besar akan segera datang.',
+    sub: '— Hitam / Black —',
+    inggris: 'The pitch-black sky indicates that a big storm will come soon.',
+    penjelasan: 'Hitam = black. Warna yang menyerap semua cahaya. "Hitam pekat" = pitch black (sangat gelap). Melambangkan keanggunan, misteri, atau bahaya.',
+    hubungan: '"Pekat" (thick/dense/intense) memperkuat kata "hitam". "Menandakan" (to indicate) berbeda dari "melambangkan" — "menandakan" lebih faktual, "melambangkan" lebih simbolis.'
+  }
+};
+
+const dataWarnaWarnacampuran = {
+  'oranye': {
+    kalimat: 'Matahari terbenam berwarna oranye keemasan sungguh memukau.',
+    sub: '— Oranye / Orange —',
+    inggris: 'The golden orange sunset is truly stunning.',
+    penjelasan: 'Oranye = orange. Warna campuran dari merah + kuning. "Oranye keemasan" = golden orange. Nama warna ini diambil dari nama buah jeruk (orange).',
+    hubungan: '"Sungguh memukau" (truly stunning) = "sungguh" memperkuat kata sifat. "Memukau" berasal dari "pukau" = to mesmerize/captivate.'
+  },
+  'ungu': {
+    kalimat: 'Bunga lavender berwarna ungu tumbuh indah di taman depan rumah.',
+    sub: '— Ungu / Purple —',
+    inggris: 'Purple lavender flowers grow beautifully in the front garden.',
+    penjelasan: 'Ungu = purple / violet. Warna campuran dari merah + biru. "Ungu muda" = lavender/lilac, "ungu tua" = deep purple.',
+    hubungan: '"Tumbuh indah" (grow beautifully) = kata kerja + kata keterangan. "Taman depan rumah" = front garden — susunan kata benda yang menerangkan.'
+  },
+  'cokelat': {
+    kalimat: 'Batang kayu berwarna cokelat tua itu terlihat sangat kuat dan kokoh.',
+    sub: '— Cokelat / Brown —',
+    inggris: 'That dark brown wooden plank looks very strong and sturdy.',
+    penjelasan: 'Cokelat = brown. Warna campuran merah+kuning+hitam. "Cokelat tua" = dark brown, "cokelat muda" = light brown. Juga berarti "chocolate" (makanan).',
+    hubungan: '"Terlihat" (looks/appears) = kata kerja persepsi visual. "Kuat dan kokoh" (strong and sturdy) = dua kata sifat sinonim yang dipasangkan untuk penguatan.'
+  },
+  'merah muda': {
+    kalimat: 'Baju merah muda itu terlihat cantik dan cocok untukmu.',
+    sub: '— Merah Muda / Pink —',
+    inggris: 'That pink dress looks beautiful and suits you well.',
+    penjelasan: 'Merah muda = pink. Warna campuran merah + putih. Secara harfiah berarti "young/soft red". Sering disebut juga "pink" (kata serapan).',
+    hubungan: '"Terlihat cantik" (looks beautiful) = penilaian visual. "Cocok untukmu" (suits you) — "cocok" (suitable/fitting) + "untuk" (for) + "-mu" (you, informal).'
+  },
+  'abu-abu': {
+    kalimat: 'Awan abu-abu tebal bergerak cepat di langit petang.',
+    sub: '— Abu-abu / Gray —',
+    inggris: 'Thick gray clouds move quickly across the evening sky.',
+    penjelasan: 'Abu-abu = gray / grey. Warna campuran hitam + putih. Namanya berasal dari "abu" (ash) yang berwarna abu-abu. Pengulangan "abu-abu" adalah pola kata warna.',
+    hubungan: '"Bergerak cepat" (move quickly) = kata kerja + keterangan cara. "Langit petang" (evening sky) — "petang" adalah waktu menjelang magrib (~17:00-18:00).'
+  }
+};
+
+const dataBentukDasar = {
+  'lingkaran': {
+    kalimat: 'Bulan purnama berbentuk lingkaran sempurna yang indah.',
+    sub: '— Lingkaran —',
+    inggris: 'A full moon is shaped like a perfect beautiful circle.',
+    penjelasan: 'Lingkaran = circle. Bentuk datar dengan semua titik sama jauh dari pusat. "Berbentuk lingkaran" = shaped like a circle.',
+    hubungan: '"Berbentuk" (shaped like / in the shape of) = "ber-" + "bentuk". "Sempurna" (perfect) adalah penilaian kualitas bentuk.'
+  },
+  'segitiga': {
+    kalimat: 'Atap rumah adat itu berbentuk segitiga yang runcing ke atas.',
+    sub: '— Segitiga —',
+    inggris: 'The roof of that traditional house is shaped like a pointed triangle.',
+    penjelasan: 'Segitiga = triangle. Bentuk dengan tiga sisi dan tiga sudut. "Segi" = sisi/sudut, "tiga" = three. Segitiga sama sisi, sama kaki, dan siku-siku.',
+    hubungan: '"Runcing ke atas" (pointed upward) menggambarkan arah bentuk. "Rumah adat" (traditional house) = rumah khas budaya tertentu di Indonesia.'
+  },
+  'persegi': {
+    kalimat: 'Ubin lantai kamar mandi berbentuk persegi dengan ukuran tiga puluh kali tiga puluh.',
+    sub: '— Persegi —',
+    inggris: 'The bathroom floor tiles are square-shaped with a size of thirty by thirty.',
+    penjelasan: 'Persegi = square. Persegi panjang istimewa dengan semua sisi sama panjang dan semua sudut 90°. "Persegi panjang" = rectangle.',
+    hubungan: '"Tiga puluh kali tiga puluh" (thirty by thirty) = ukuran dalam sentimeter. Kata "kali" (times) digunakan untuk menyatakan dimensi ukuran.'
+  },
+  'persegi panjang': {
+    kalimat: 'Layar ponselku berbentuk persegi panjang yang ramping dan modern.',
+    sub: '— Persegi Panjang —',
+    inggris: 'My phone screen is a slim and modern rectangle shape.',
+    penjelasan: 'Persegi panjang = rectangle. Bentuk dengan empat sisi dan empat sudut 90°, dua sisi lebih panjang dari dua sisi lainnya.',
+    hubungan: '"Ramping" (slim/slender) dan "modern" adalah dua kata sifat penilaian. "Ponselku" = "ponsel" + "-ku" (my phone) — sufiks kepunyaan informal.'
+  },
+  'oval': {
+    kalimat: 'Telur ayam berbentuk oval dengan ujung yang sedikit runcing.',
+    sub: '— Oval —',
+    inggris: 'A chicken egg is oval-shaped with a slightly pointed end.',
+    penjelasan: 'Oval = oval / ellipse. Bentuk mirip lingkaran tapi lebih memanjang di satu arah. Kata "oval" dipakai langsung dalam bahasa Indonesia.',
+    hubungan: '"Dengan ujung yang sedikit runcing" (with a slightly pointed end) = klausa tambahan. "Sedikit" (slightly/a little) melemahkan sifat "runcing" (pointed).'
+  },
+  'bintang': {
+    kalimat: 'Anak-anak memotong kertas menjadi bentuk bintang untuk menghias kelas.',
+    sub: '— Bintang —',
+    inggris: 'The children cut paper into star shapes to decorate the classroom.',
+    penjelasan: 'Bintang = star. Bentuk dengan beberapa sudut runcing yang menonjol keluar. "Bintang lima" = five-pointed star, juga berarti bintang lima (kelas hotel).',
+    hubungan: '"Menjadi bentuk" (into the shape of) = perubahan wujud. "Untuk menghias" (to decorate) = tujuan kegiatan — "untuk" + kata kerja.'
+  }
+};
+
+const dataBentukRuang = {
+  'bola': {
+    kalimat: 'Anak-anak bermain bola di lapangan setelah pulang sekolah.',
+    sub: '— Bola / Sphere —',
+    inggris: 'The children play ball in the field after school.',
+    penjelasan: 'Bola = ball (benda) / sphere (bentuk geometri). Bentuk tiga dimensi bulat sempurna. "Bola" dalam percakapan sering berarti bola sepak.',
+    hubungan: '"Bermain bola" (to play ball/football) = frasa umum untuk bermain sepak bola di Indonesia. "Setelah pulang sekolah" (after school) = waktu kegiatan anak.'
+  },
+  'kubus': {
+    kalimat: 'Es batu berbentuk kubus lebih mudah disusun di dalam gelas.',
+    sub: '— Kubus / Cube —',
+    inggris: 'Cube-shaped ice is easier to stack inside a glass.',
+    penjelasan: 'Kubus = cube. Bentuk 3D dengan enam sisi persegi yang sama besar. "Dadu" (dice) juga berbentuk kubus.',
+    hubungan: '"Lebih mudah" (easier) = perbandingan menggunakan "lebih". "Disusun" (to be stacked/arranged) = bentuk pasif dari "menyusun" (to arrange).'
+  },
+  'tabung': {
+    kalimat: 'Tabung gas elpiji berbentuk silinder berwarna biru.',
+    sub: '— Tabung / Cylinder —',
+    inggris: 'The LPG gas cylinder is a blue-colored cylindrical shape.',
+    penjelasan: 'Tabung = cylinder (bentuk) / tube / container. Bentuk 3D dengan dua lingkaran sejajar dihubungkan permukaan lengkung.',
+    hubungan: '"Gas elpiji" = LPG (Liquefied Petroleum Gas) — digunakan untuk memasak di Indonesia. "Berwarna biru" (blue-colored) = standar warna tabung gas Pertamina.'
+  },
+  'kerucut': {
+    kalimat: 'Topi ulang tahun berbentuk kerucut warna-warni terlihat lucu.',
+    sub: '— Kerucut / Cone —',
+    inggris: 'Colorful cone-shaped birthday hats look funny and cute.',
+    penjelasan: 'Kerucut = cone. Bentuk 3D dengan alas lingkaran dan satu titik puncak. "Es krim kerucut" = ice cream cone.',
+    hubungan: '"Warna-warni" (colorful) = pengulangan kata untuk menunjukkan keberagaman warna. "Terlihat lucu" (looks funny/cute) = "terlihat" + kata sifat untuk penilaian visual.'
+  },
+  'piramida': {
+    kalimat: 'Piramida Mesir berbentuk seperti kerucut persegi dengan alas yang sangat luas.',
+    sub: '— Piramida / Pyramid —',
+    inggris: 'The Egyptian pyramid is shaped like a square cone with a very wide base.',
+    penjelasan: 'Piramida = pyramid. Bentuk 3D dengan alas persegi (atau segitiga) dan sisi-sisi segitiga yang bertemu di satu titik puncak.',
+    hubungan: '"Berbentuk seperti" (shaped like) = perbandingan bentuk. "Alas yang sangat luas" (very wide base) — "alas" = base/bottom surface dari bangun geometri.'
+  }
+};
+
+// =============================================
+// DATA STRUKTUR KALIMAT
+// =============================================
+
+// 1. KATA GANTI (Pronouns)
+const dataStrGanti = {
+  'he': {
+    kalimat: 'He is my brother — dia adalah kakak laki-laki saya.',
+    sub: '— He · Dia (laki-laki) —',
+    inggris: 'He = dia untuk laki-laki. Selalu digunakan sebagai SUBJEK kalimat.',
+    penjelasan: 'Bahasa Indonesia hanya punya satu kata "dia" untuk semua gender. Inggris membedakan: HE untuk laki-laki, SHE untuk perempuan. Tidak boleh ditukar!',
+    hubungan: 'He (subjek) → Him (objek). Contoh: "He likes her" = Dia (lk) menyukai dia (pr). "She likes him" = Dia (pr) menyukai dia (lk). Posisi dalam kalimat menentukan bentuk kata!'
+  },
+  'she': {
+    kalimat: 'She is my sister — dia adalah kakak perempuan saya.',
+    sub: '— She · Dia (perempuan) —',
+    inggris: 'She = dia untuk perempuan. Selalu digunakan sebagai SUBJEK kalimat.',
+    penjelasan: 'SHE hanya untuk perempuan — tidak bisa digunakan untuk laki-laki. Ini berbeda dari bahasa Indonesia yang menggunakan "dia" untuk semua orang.',
+    hubungan: 'She (subjek) → Her (objek & kepunyaan). "She loves him" = Dia (pr) mencintai dia (lk). "Her book" = bukunya (milik perempuan). Satu kata, dua fungsi!'
+  },
+  'he loves her': {
+    kalimat: 'He loves her — laki-laki itu mencintai perempuan itu.',
+    sub: '— He loves Her —',
+    inggris: 'He (subject) loves her (object) = the man loves the woman.',
+    penjelasan: '"He" = subjek (pelaku). "Her" = objek (yang dikenai tindakan). Kata ganti berubah bentuk tergantung posisinya dalam kalimat — ini disebut PRONOUN CASE.',
+    hubungan: 'Bandingkan: "He loves HER" vs "SHE loves HIM". Subjek: I, You, He, She, We, They. Objek: Me, You, Him, Her, Us, Them. Posisi = bentuk berbeda!'
+  },
+  'she loves him': {
+    kalimat: 'She loves him — perempuan itu mencintai laki-laki itu.',
+    sub: '— She loves Him —',
+    inggris: 'She (subject) loves him (object) = the woman loves the man.',
+    penjelasan: '"She" berubah menjadi "her" saat jadi objek. "He" berubah menjadi "him" saat jadi objek. Bahasa Indonesia TIDAK mengalami perubahan seperti ini.',
+    hubungan: 'Tabel perubahan: He→Him, She→Her, They→Them, I→Me, We→Us. Hanya "You" yang tidak berubah! "You love you" (aneh) vs "I love you" — You tetap sama.'
+  },
+  'they': {
+    kalimat: 'They are my friends — mereka adalah teman-teman saya.',
+    sub: '— They · Mereka —',
+    inggris: 'They = mereka (lebih dari satu orang). Digunakan untuk subjek jamak.',
+    penjelasan: 'THEY digunakan untuk lebih dari satu orang. Juga digunakan dalam Inggris modern sebagai kata ganti netral (non-binary) untuk satu orang.',
+    hubungan: 'They (subjek) → Them (objek). "I like them" = Saya menyukai mereka. "Their" = milik mereka. "Theirs" = kepunyaan mereka. Empat bentuk dari satu kata!'
+  },
+  'we vs they': {
+    kalimat: 'We are students. They are teachers — kami pelajar, mereka guru.',
+    sub: '— We vs They —',
+    inggris: 'We = kami/kita (termasuk pembicara). They = mereka (tidak termasuk pembicara).',
+    penjelasan: 'Inggris hanya punya "we" untuk kami/kita. Bahasa Indonesia membedakan "kami" (tidak termasuk lawan bicara) dan "kita" (termasuk lawan bicara) — perbedaan yang tidak ada di Inggris!',
+    hubungan: '"Kami pergi" = We go (lawan bicara tidak ikut). "Kita pergi" = We go (lawan bicara ikut). Bahasa Indonesia lebih presisi di sini — Inggris tidak membedakannya!'
+  }
+};
+
+// 2. TO BE (is / am / are)
+const dataStrTobe = {
+  'is': {
+    kalimat: 'She is a doctor — dia adalah seorang dokter.',
+    sub: '— IS —',
+    inggris: 'IS = adalah / sedang. Digunakan untuk He, She, It (tunggal orang ketiga).',
+    penjelasan: '"Is" adalah bentuk "to be" untuk subjek tunggal orang ketiga: He is, She is, It is. Fungsi ganda: menyatakan identitas (is a doctor) atau kondisi (is tired).',
+    hubungan: 'Tiga bentuk To Be sekarang: AM (I), IS (He/She/It), ARE (You/We/They). Mudah diingat: "I AM, YOU ARE, HE IS" — tiga pola berbeda untuk tiga jenis subjek.'
+  },
+  'am': {
+    kalimat: 'I am a student — saya adalah seorang pelajar.',
+    sub: '— AM —',
+    inggris: 'AM = adalah / sedang. HANYA digunakan dengan I (saya).',
+    penjelasan: '"Am" EKSKLUSIF hanya untuk "I". Tidak ada subjek lain yang menggunakan "am". "I am" disingkat menjadi "I\'m" dalam percakapan sehari-hari.',
+    hubungan: '"I am happy" = Saya sedang bahagia. "I am a teacher" = Saya adalah guru. Dalam pertanyaan: "Am I right?" = Apakah saya benar? "Am" selalu pasangan setia "I".'
+  },
+  'are': {
+    kalimat: 'They are happy — mereka sedang bahagia.',
+    sub: '— ARE —',
+    inggris: 'ARE = adalah / sedang. Digunakan untuk You, We, They (jamak atau orang kedua).',
+    penjelasan: '"Are" digunakan untuk: YOU (kamu/Anda), WE (kami/kita), THEY (mereka). Jadi "are" mencakup semua subjek jamak kecuali orang ketiga tunggal.',
+    hubungan: 'You are → You\'re. We are → We\'re. They are → They\'re. Semua bisa disingkat! Pertanyaan: "Are you okay?" "Are they coming?" — "are" selalu di depan subjek saat bertanya.'
+  },
+  'is vs are': {
+    kalimat: 'Is that your bag? — Are those your bags? Apakah itu tasmu?',
+    sub: '— IS vs ARE —',
+    inggris: 'IS = satu benda/orang. ARE = lebih dari satu benda/orang.',
+    penjelasan: 'Pilihan antara "is" dan "are" tergantung JUMLAH subjeknya. Satu = is. Lebih dari satu = are. Ini disebut "subject-verb agreement" — kata kerja harus sesuai dengan jumlah subjek.',
+    hubungan: '"The cat IS cute" vs "The cats ARE cute". Perhatikan: subjek berubah (cat→cats) dan kata kerja juga berubah (is→are). Keduanya harus berubah bersamaan!'
+  },
+  'was vs were': {
+    kalimat: 'He was tired. They were tired — dia lelah. mereka lelah. (kemarin)',
+    sub: '— WAS vs WERE (lampau) —',
+    inggris: 'WAS = is/am di masa lalu. WERE = are di masa lalu.',
+    penjelasan: 'Masa lalu dari To Be: IS→WAS, AM→WAS, ARE→WERE. "Was" untuk I/He/She/It. "Were" untuk You/We/They. Sama polanya, hanya waktunya berbeda.',
+    hubungan: 'Sekarang: "I am here" → Kemarin: "I was here". Sekarang: "They are ready" → Kemarin: "They were ready". Perubahan waktu = perubahan was/were!'
+  }
+};
+
+// 3. KATA TUNJUK (This/That/These/Those)
+const dataStrTunjuk = {
+  'this': {
+    kalimat: 'This is my phone — ini adalah ponsel saya.',
+    sub: '— THIS · Ini (dekat, satu) —',
+    inggris: 'THIS = ini. Digunakan untuk SATU benda yang DEKAT dengan pembicara.',
+    penjelasan: '"This" menunjuk satu benda yang ada di dekat kita — bisa dijangkau atau sangat dekat. Pasangan kata kerja: IS (karena satu benda).',
+    hubungan: 'THIS (satu, dekat) → THESE (banyak, dekat). "This book" → "These books". Perhatikan: saat kata benda berubah jadi jamak, "this" berubah menjadi "these"!'
+  },
+  'that': {
+    kalimat: 'That is a beautiful mountain — itu adalah gunung yang indah.',
+    sub: '— THAT · Itu (jauh, satu) —',
+    inggris: 'THAT = itu. Digunakan untuk SATU benda yang JAUH dari pembicara.',
+    penjelasan: '"That" menunjuk satu benda yang jauh — tidak bisa dijangkau langsung. Pasangan kata kerja: IS (karena satu benda). "That" juga digunakan sebagai kata penghubung: "I think THAT you are right."',
+    hubungan: 'THAT (satu, jauh) → THOSE (banyak, jauh). "That car" → "Those cars". Jarak + jumlah = kombinasi yang menentukan this/that/these/those!'
+  },
+  'these': {
+    kalimat: 'These are my books — ini adalah buku-buku saya.',
+    sub: '— THESE · Ini (dekat, banyak) —',
+    inggris: 'THESE = ini (jamak). Digunakan untuk BANYAK benda yang DEKAT dengan pembicara.',
+    penjelasan: '"These" adalah bentuk jamak dari "this". Pasangan kata kerja: ARE (karena lebih dari satu). Dalam bahasa Indonesia, "ini" tidak berubah bentuk apapun jumlahnya.',
+    hubungan: '"This is my pen" → "These are my pens". Dua hal yang berubah: this→these DAN is→are DAN pen→pens. Tiga perubahan sekaligus! Ini yang membuat Inggris kompleks.'
+  },
+  'those': {
+    kalimat: 'Those are beautiful flowers — itu adalah bunga-bunga yang indah.',
+    sub: '— THOSE · Itu (jauh, banyak) —',
+    inggris: 'THOSE = itu (jamak). Digunakan untuk BANYAK benda yang JAUH dari pembicara.',
+    penjelasan: '"Those" adalah bentuk jamak dari "that". Pasangan kata kerja: ARE. Ini adalah kata tunjuk paling sering tertukar dengan "these" oleh pelajar Indonesia.',
+    hubungan: 'Tabel lengkap: THIS (dekat-satu) · THAT (jauh-satu) · THESE (dekat-banyak) · THOSE (jauh-banyak). Dua dimensi: JARAK (dekat/jauh) × JUMLAH (satu/banyak) = 4 kata!'
+  },
+  'is that vs are those': {
+    kalimat: 'Is that a bird? — Are those birds? Apakah itu burung?',
+    sub: '— Is that? vs Are those? —',
+    inggris: '"Is that...?" = Apakah itu... (satu)? "Are those...?" = Apakah itu... (banyak)?',
+    penjelasan: 'Dalam kalimat tanya, "is/are" pindah ke depan kalimat. "Is that your car?" (satu mobil) vs "Are those your cars?" (banyak mobil). Jumlah benda menentukan is atau are.',
+    hubungan: 'Pola tanya: IS/ARE + THIS/THAT/THESE/THOSE + kata benda + ...? Jawaban: "Yes, it is." / "Yes, they are." — "that/those" berubah menjadi "it/they" dalam jawaban!'
+  }
+};
+
+// 4. KONTRAKSI (Singkatan)
+const dataStrKontraksi = {
+  "they're": {
+    kalimat: "They're my best friends — mereka adalah sahabat terbaik saya.",
+    sub: "— They're = They are —",
+    inggris: "They're = They are. Apostrof (') menggantikan huruf 'a' yang dihilangkan.",
+    penjelasan: "Kontraksi adalah penggabungan dua kata dengan menghilangkan satu atau beberapa huruf, digantikan apostrof ('). 'They are' → 'They're'. Digunakan dalam percakapan dan tulisan informal.",
+    hubungan: "Hati-hati dengan 'their' dan 'there'! 'They're' (mereka adalah) vs 'Their' (milik mereka) vs 'There' (di sana). Ketiganya berbunyi sama tapi artinya sangat berbeda!"
+  },
+  "you're": {
+    kalimat: "You're so kind — kamu sangat baik hati.",
+    sub: "— You're = You are —",
+    inggris: "You're = You are. Hati-hati jangan tertukar dengan 'Your' (milikmu)!",
+    penjelasan: "'You're' (you are) vs 'Your' (kepunyaanmu) adalah kesalahan paling umum dalam bahasa Inggris! 'You're beautiful' = Kamu cantik. 'Your dress is beautiful' = Gaunmu cantik.",
+    hubungan: "Cara mudah membedakan: ganti dengan 'you are'. 'You're welcome' = 'You are welcome' ✓. 'Your welcome' = 'You are welcome'? Tidak masuk akal! Jadi harus 'you're'."
+  },
+  "it's": {
+    kalimat: "It's raining today — hari ini sedang hujan.",
+    sub: "— It's = It is —",
+    inggris: "It's = It is. Sering tertukar dengan 'Its' (kepunyaan benda/hewan).",
+    penjelasan: "'It's' (it is) vs 'Its' (miliknya — untuk benda atau hewan). 'It's a dog' = Itu adalah anjing. 'Its tail is long' = Ekornya panjang (ekor milik anjing itu).",
+    hubungan: "Pola konsisten: kata ganti + 's = kontraksi (it is). Kepunyaan TIDAK pakai apostrof untuk kata ganti: Its, Yours, Hers, His, Ours, Theirs — semuanya TANPA apostrof!"
+  },
+  "I'm": {
+    kalimat: "I'm so happy to meet you — saya sangat senang bertemu kamu.",
+    sub: "— I'm = I am —",
+    inggris: "I'm = I am. Kontraksi paling sering digunakan dalam percakapan sehari-hari.",
+    penjelasan: "'I am' hampir selalu disingkat menjadi 'I'm' dalam percakapan. 'I am' (bentuk penuh) digunakan saat ingin menekankan atau dalam situasi sangat formal.",
+    hubungan: "Semua kontraksi to be: I'm, You're, He's, She's, It's, We're, They're. Semua menggunakan apostrof + s atau re. Hanya 'I'm' yang berbeda karena 'I am' disingkat berbeda."
+  },
+  "he's she's": {
+    kalimat: "He's tall. She's smart — dia (lk) tinggi. Dia (pr) pintar.",
+    sub: "— He's = He is · She's = She is —",
+    inggris: "He's = He is. She's = She is. Juga bisa berarti He has / She has!",
+    penjelasan: "Kontraksi 's memiliki DUA makna: (1) is: 'He's a doctor' = He IS a doctor. (2) has: 'He's eaten' = He HAS eaten. Konteks kalimat yang menentukan maknanya!",
+    hubungan: "'He's happy' = He IS happy (keadaan sekarang). 'He's gone' = He HAS gone (sudah pergi). Cara membedakan: setelah 'is' ada kata sifat/benda, setelah 'has' ada kata kerja bentuk ketiga."
+  },
+  "won't can't don't": {
+    kalimat: "I can't do it. I won't give up — saya tidak bisa. Saya tidak akan menyerah.",
+    sub: "— Kontraksi Negatif —",
+    inggris: "Can't = cannot. Won't = will not. Don't = do not. Bentuk negatif yang disingkat.",
+    penjelasan: "Kontraksi negatif: not disingkat menjadi n't. Can + not = can't. Do + not = don't. Will + not = won't (tidak beraturan! Bukan 'willn't'). Should not = shouldn't.",
+    hubungan: "Daftar kontraksi negatif penting: don't, doesn't, didn't, can't, couldn't, won't, wouldn't, shouldn't, isn't, aren't, wasn't, weren't. 'Won't' adalah satu-satunya yang tidak beraturan!"
+  }
+};
+
+// 5. KALIMAT TANYA
+const dataStrTanya = {
+  'yes no question': {
+    kalimat: 'Are you a student? Yes, I am. / No, I am not.',
+    sub: '— Pertanyaan Ya/Tidak —',
+    inggris: 'Yes/No question: To be / Modal verb pindah ke depan kalimat.',
+    penjelasan: 'Untuk membuat pertanyaan ya/tidak: pindahkan "is/am/are" atau modal (can, will, should) ke depan subjek. "You are tired" → "Are you tired?" Urutan berubah!',
+    hubungan: 'Pola: IS/ARE/AM + Subjek + ...? Jawaban pendek: "Yes, I am." / "No, I\'m not." Tidak perlu mengulang seluruh kalimat — cukup subjek + to be!'
+  },
+  'wh question': {
+    kalimat: 'What is your name? Where are you from? — Siapa namamu? Dari mana asalmu?',
+    sub: '— Pertanyaan WH —',
+    inggris: 'WH questions: What, Where, When, Who, Why, How — kata tanya diletakkan di awal.',
+    penjelasan: 'Kata tanya: What (apa), Where (di mana), When (kapan), Who (siapa), Why (kenapa), How (bagaimana). Pola: Kata tanya + is/are + subjek + ...?',
+    hubungan: 'Bandingkan: "You are from Jakarta" → "Where are you from?" Kata tanya menggantikan informasi yang dicari. "What" untuk benda/hal, "Who" untuk orang, "Where" untuk tempat.'
+  },
+  'do does': {
+    kalimat: 'Do you like coffee? Does she speak English? — Apakah kamu suka kopi?',
+    sub: '— Do vs Does —',
+    inggris: 'DO = untuk I/You/We/They. DOES = untuk He/She/It. Digunakan untuk pertanyaan kata kerja biasa.',
+    penjelasan: '"Do/Does" digunakan untuk membuat pertanyaan dari kata kerja aksi (bukan to be). "You like coffee" → "Do you like coffee?" "She speaks English" → "Does she speak English?"',
+    hubungan: 'Penting: saat pakai DOES, kata kerja kembali ke bentuk dasar! "She speakS" → "Does she SPEAK?" (bukan "does she speaks"). DOES sudah mewakili orang ketiga tunggal.'
+  },
+  'did': {
+    kalimat: 'Did you eat breakfast? — Apakah kamu sudah sarapan tadi?',
+    sub: '— Did (pertanyaan lampau) —',
+    inggris: 'DID = do/does di masa lalu. Digunakan untuk pertanyaan tentang kejadian yang sudah lewat.',
+    penjelasan: '"Did" digunakan untuk semua subjek (I/You/He/She/We/They) di masa lalu. Seperti "does", setelah "did" kata kerja kembali ke bentuk dasar.',
+    hubungan: '"She ate" → "Did she eat?" (bukan "did she ate"). Pola konsisten: DID + subjek + kata kerja dasar + ...? Jawaban: "Yes, she did." / "No, she didn\'t."'
+  },
+  'how many vs how much': {
+    kalimat: 'How many apples? How much water? — Berapa banyak apel? Berapa banyak air?',
+    sub: '— How Many vs How Much —',
+    inggris: 'How many = berapa banyak (untuk benda yang bisa dihitung). How much = berapa banyak (untuk benda yang tidak bisa dihitung).',
+    penjelasan: 'Inggris membedakan benda yang bisa dihitung (countable) dan tidak bisa dihitung (uncountable). Apel bisa dihitung → How many apples? Air tidak bisa dihitung → How much water?',
+    hubungan: 'Countable (pakai many): apples, books, students, cars. Uncountable (pakai much): water, rice, money, time, information. Bahasa Indonesia hanya pakai "berapa banyak" untuk keduanya!'
+  }
+};
+
+// 6. WAKTU KALIMAT (Tenses dasar)
+const dataStrWaktu = {
+  'simple present': {
+    kalimat: 'She walks to school every day — dia berjalan ke sekolah setiap hari.',
+    sub: '— Simple Present (kebiasaan/fakta) —',
+    inggris: 'Simple Present = kebiasaan, fakta, atau kebenaran umum yang terjadi secara rutin.',
+    penjelasan: 'Simple Present digunakan untuk: (1) Kebiasaan: "I drink coffee every morning". (2) Fakta umum: "The sun rises in the east". (3) Jadwal tetap: "The train leaves at 8".',
+    hubungan: 'Aturan khusus: He/She/It + kata kerja + S/ES. "I walk" → "She walkS". "I go" → "He goeS". Penambahan -s/-es hanya untuk orang ketiga tunggal di Simple Present!'
+  },
+  'present continuous': {
+    kalimat: 'She is walking to school right now — dia sedang berjalan ke sekolah sekarang.',
+    sub: '— Present Continuous (sedang terjadi) —',
+    inggris: 'Present Continuous = sedang terjadi saat ini. Pola: is/am/are + kata kerja + -ing.',
+    penjelasan: 'Present Continuous menunjukkan aksi yang SEDANG berlangsung saat ini. Kata "sedang" dalam bahasa Indonesia adalah tanda yang baik untuk menggunakan tense ini.',
+    hubungan: 'Bandingkan: "She walkS to school" (kebiasaan setiap hari) vs "She IS walkING to school" (sedang berjalan sekarang). Sama-sama present, tapi waktu berbeda!'
+  },
+  'simple past': {
+    kalimat: 'He walked to school yesterday — dia berjalan ke sekolah kemarin.',
+    sub: '— Simple Past (sudah terjadi) —',
+    inggris: 'Simple Past = kejadian yang sudah selesai di masa lalu. Kata kerja berubah bentuk.',
+    penjelasan: 'Simple Past: tambahkan -ed untuk kata kerja beraturan (walk→walked, play→played). Kata kerja tidak beraturan berubah sendiri: go→went, eat→ate, see→saw.',
+    hubungan: 'Bahasa Indonesia menggunakan kata "sudah", "telah", "tadi", "kemarin" untuk menunjukkan masa lalu — kata kerjanya tidak berubah. Inggris mengubah BENTUK kata kerjanya!'
+  },
+  'will future': {
+    kalimat: 'I will call you tomorrow — saya akan menelepon kamu besok.',
+    sub: '— Will (akan terjadi) —',
+    inggris: 'Will = akan. Digunakan untuk rencana, janji, atau prediksi di masa depan.',
+    penjelasan: '"Will" diikuti kata kerja bentuk dasar (tidak berubah). "I will go", "She will go", "They will go" — tidak ada perubahan apapun setelah "will" untuk semua subjek!',
+    hubungan: 'Will = keputusan spontan atau janji. "I\'ll help you!" (tiba-tiba memutuskan). Going to = rencana yang sudah dipikirkan. "I\'m going to study tonight" (sudah direncanakan).'
+  },
+  'present perfect': {
+    kalimat: 'I have eaten — saya sudah makan. She has gone — dia sudah pergi.',
+    sub: '— Present Perfect (sudah/pernah) —',
+    inggris: 'Present Perfect: have/has + kata kerja bentuk ketiga (past participle).',
+    penjelasan: 'Present Perfect menghubungkan masa lalu dengan sekarang. "I have eaten" = saya sudah makan (dan kenyang sekarang). Tidak menyebutkan KAPAN tepatnya.',
+    hubungan: 'Have (untuk I/You/We/They) + Has (untuk He/She/It) + V3. Kata kerja beraturan: eat→eaten, go→gone, see→seen. Tidak beraturan harus dihafalkan satu per satu!'
+  }
+};
+
+// =============================================
+// DATA GABUNGAN STRUKTUR KALIMAT
+// =============================================
+const dataStrSemua = mergeData(dataStrGanti, dataStrTobe, dataStrTunjuk, dataStrKontraksi, dataStrTanya, dataStrWaktu);
+function mergeData(...datasets) {
+  return Object.assign({}, ...datasets);
+}
+
+const dataAlatSemua    = mergeData(dataAlatDapur, dataAlatKebersihan, dataAlatTulis, dataAlatRumah);
+const dataMakanSemua   = mergeData(dataMakanBuah, dataMakanSayur, dataMakanMasakan, dataMakanMinuman);
+const dataAngkaSemua   = mergeData(dataAngkaBilangan, dataAngkaUrutan, dataAngkaJumlah, dataAngkaWaktu);
+const dataWarnaSemua   = mergeData(dataWarnaWarnadasar, dataWarnaWarnacampuran, dataBentukDasar, dataBentukRuang);
+
+// =============================================
+// MAPPING MODE → DATA
+// =============================================
+const gameTitles = {
+  'alat_dapur':'🧰 Alat Dapur','alat_kebersihan':'🧹 Alat Kebersihan',
+  'alat_tulis':'✏️ Alat Tulis','alat_rumah':'🏠 Alat Rumah','alat_semua':'🧰 Semua Alat',
+  'makan_buah':'🍎 Buah-buahan','makan_sayur':'🥬 Sayuran',
+  'makan_masakan':'🍜 Masakan','makan_minuman':'🥤 Minuman','makan_semua':'🍽️ Semua Makanan',
+  'angka_bilangan':'🔢 Bilangan','angka_urutan':'📊 Angka Urutan',
+  'angka_jumlah':'📦 Jumlah Benda','angka_waktu':'🕐 Waktu','angka_semua':'🔢 Semua Angka',
+  'warna_dasar':'🎨 Warna Dasar','warna_campuran':'🖌️ Warna Campuran',
+  'bentuk_dasar':'⬜ Bentuk Dasar','bentuk_ruang':'📦 Bentuk Ruang','warna_semua':'🎨 Semua Warna & Bentuk',
+  'str_ganti':'📐 Kata Ganti','str_tobe':'📐 To Be (is/am/are)',
+  'str_tunjuk':'📐 Kata Tunjuk','str_kontraksi':'📐 Kontraksi',
+  'str_tanya':'📐 Kalimat Tanya','str_waktu':'📐 Waktu Kalimat','str_semua':'📐 Semua Struktur'
+};
+
+const returnPage = {
+  'alat_dapur':'page-alat','alat_kebersihan':'page-alat','alat_tulis':'page-alat','alat_rumah':'page-alat','alat_semua':'page-alat',
+  'makan_buah':'page-makan','makan_sayur':'page-makan','makan_masakan':'page-makan','makan_minuman':'page-makan','makan_semua':'page-makan',
+  'angka_bilangan':'page-angka','angka_urutan':'page-angka','angka_jumlah':'page-angka','angka_waktu':'page-angka','angka_semua':'page-angka',
+  'warna_dasar':'page-warna','warna_campuran':'page-warna','bentuk_dasar':'page-warna','bentuk_ruang':'page-warna','warna_semua':'page-warna',
+  'str_ganti':'page-struktur','str_tobe':'page-struktur','str_tunjuk':'page-struktur',
+  'str_kontraksi':'page-struktur','str_tanya':'page-struktur','str_waktu':'page-struktur','str_semua':'page-struktur'
+};
+
+function getDataset(mode) {
+  const map = {
+    'alat_dapur': dataAlatDapur, 'alat_kebersihan': dataAlatKebersihan,
+    'alat_tulis': dataAlatTulis, 'alat_rumah': dataAlatRumah, 'alat_semua': dataAlatSemua,
+    'makan_buah': dataMakanBuah, 'makan_sayur': dataMakanSayur,
+    'makan_masakan': dataMakanMasakan, 'makan_minuman': dataMakanMinuman, 'makan_semua': dataMakanSemua,
+    'angka_bilangan': dataAngkaBilangan, 'angka_urutan': dataAngkaUrutan,
+    'angka_jumlah': dataAngkaJumlah, 'angka_waktu': dataAngkaWaktu, 'angka_semua': dataAngkaSemua,
+    'warna_dasar': dataWarnaWarnadasar, 'warna_campuran': dataWarnaWarnacampuran,
+    'bentuk_dasar': dataBentukDasar, 'bentuk_ruang': dataBentukRuang, 'warna_semua': dataWarnaSemua,
+    'str_ganti': dataStrGanti, 'str_tobe': dataStrTobe, 'str_tunjuk': dataStrTunjuk,
+    'str_kontraksi': dataStrKontraksi, 'str_tanya': dataStrTanya, 'str_waktu': dataStrWaktu,
+    'str_semua': dataStrSemua
+  };
+  return map[mode] || {};
+}
+
+// =============================================
+// STATE & GAME ENGINE
+// =============================================
+let currentMode  = '';
+let shuffledKeys = [];
+let currentIndex = 0;
+let gameSeconds  = 0;
+let gameInterval = null;
+let savedSeconds = 0;
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function formatTime(s) {
+  const jam    = Math.floor(s / 3600);
+  const menit  = Math.floor((s % 3600) / 60);
+  const detik  = s % 60;
+  return jam + ' Jam ' + menit + ' Menit ' + detik + ' Detik';
+}
+
+function startTimer() {
+  clearInterval(gameInterval);
+  gameSeconds = 0;
+  gameInterval = setInterval(() => {
+    gameSeconds++;
+    document.getElementById('game-timer-display').textContent = formatTime(savedSeconds + gameSeconds);
+  }, 1000);
+}
+
+function openPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function startGame(mode) {
+  currentMode  = mode;
+  const dataset = getDataset(mode);
+  shuffledKeys  = shuffle(Object.keys(dataset));
+  currentIndex  = 0;
+  document.getElementById('game-title').textContent = gameTitles[mode] || mode;
+  startTimer();
+  renderCard();
+  openPage('page-game');
+}
+
+function renderCard() {
+  const dataset = getDataset(currentMode);
+  const key     = shuffledKeys[currentIndex];
+  const data    = dataset[key];
+  document.getElementById('game-kalimat').textContent   = data.kalimat;
+  document.getElementById('game-sub').textContent       = data.sub;
+  document.getElementById('instr-1').textContent        = data.inggris;
+  document.getElementById('instr-2').textContent        = data.penjelasan;
+  document.getElementById('instr-3').textContent        = data.hubungan;
+  document.getElementById('game-progress').textContent  = (currentIndex + 1) + ' / ' + shuffledKeys.length;
+  document.getElementById('btn-kembali-game').disabled  = (currentIndex === 0);
+  document.getElementById('btn-lanjut-game').textContent =
+    (currentIndex === shuffledKeys.length - 1) ? 'SELESAI ✓' : 'LANJUTKAN ▶';
+}
+
+function navGame(dir) {
+  const newIndex = currentIndex + dir;
+  if (newIndex < 0) return;
+  if (newIndex >= shuffledKeys.length) { endGame(); return; }
+  currentIndex = newIndex;
+  renderCard();
+}
+
+function endGame() {
+  clearInterval(gameInterval);
+  savedSeconds += gameSeconds;
+  const label = formatTime(savedSeconds);
+  document.getElementById('main-timer').textContent = label;
+  ['timer-alat','timer-makan','timer-angka','timer-warna','timer-struktur'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = label;
+  });
+  openPage(returnPage[currentMode] || 'page-main');
+}
+</script>
+</body>
+</html>
